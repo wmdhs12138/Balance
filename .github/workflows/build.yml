@@ -18,8 +18,8 @@ jobs:
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
-          distribution: "zulu"
-          java-version: 21
+          distribution: "temurin"
+          java-version: 17
 
       - name: Check connectivity
         run: |
@@ -34,6 +34,18 @@ jobs:
           done
           echo "--- Java info ---"
           java -version 2>&1
+
+      - name: Check Gradle artifacts
+        run: |
+          echo "--- Testing Gradle artifact URLs ---"
+          for url in \
+            "https://maven.aliyun.com/repository/google/com/android/tools/build/gradle/8.7.3/gradle-8.7.3.pom" \
+            "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.7.3/gradle-8.7.3.pom" \
+            "https://maven.aliyun.com/repository/google/com/android/application/com.android.application.gradle.plugin/8.7.3/com.android.application.gradle.plugin-8.7.3.pom" \
+            "https://dl.google.com/dl/android/maven2/com/android/application/com.android.application.gradle.plugin/8.7.3/com.android.application.gradle.plugin-8.7.3.pom"; do
+            echo -n "$url ... "
+            curl -L -s -o /dev/null -w "%{http_code}\n" --max-time 20 "$url" || echo "FAILED"
+          done
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
