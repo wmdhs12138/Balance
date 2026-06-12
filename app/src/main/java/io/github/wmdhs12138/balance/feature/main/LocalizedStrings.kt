@@ -1,0 +1,69 @@
+package io.github.wmdhs12138.balance.feature.main
+
+import android.content.Context
+import androidx.annotation.StringRes
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import io.github.wmdhs12138.balance.R
+import io.github.wmdhs12138.balance.core.model.AppLanguage
+import io.github.wmdhs12138.balance.core.model.BalanceStatus
+import io.github.wmdhs12138.balance.core.model.ThemeMode
+import io.github.wmdhs12138.balance.ui.locale.localized
+
+@Composable
+fun rememberLocalizedStrings(language: AppLanguage): LocalizedStrings {
+    val context = LocalContext.current
+    val localizedContext = remember(context, language) {
+        context.localized(language)
+    }
+    return remember(localizedContext) {
+        LocalizedStrings(localizedContext)
+    }
+}
+
+class LocalizedStrings(
+    private val context: Context,
+) {
+    fun get(@StringRes resId: Int, vararg args: Any): String {
+        return if (args.isEmpty()) {
+            context.getString(resId)
+        } else {
+            context.getString(resId, *args)
+        }
+    }
+}
+
+fun BalanceStatus.label(strings: LocalizedStrings): String {
+    return when (this) {
+        BalanceStatus.NotConnected -> strings.get(R.string.status_not_connected)
+        BalanceStatus.NeedsLogin -> strings.get(R.string.status_login_required)
+        BalanceStatus.Ready -> strings.get(R.string.status_ready)
+        BalanceStatus.Forbidden -> strings.get(R.string.status_forbidden)
+        BalanceStatus.NotFound -> strings.get(R.string.status_interface_not_found)
+        BalanceStatus.Timeout -> strings.get(R.string.status_timeout)
+        BalanceStatus.NetworkError -> strings.get(R.string.status_network_error)
+        BalanceStatus.ParserMismatch -> strings.get(R.string.status_parser_mismatch)
+        BalanceStatus.Failed -> strings.get(R.string.status_failed)
+    }
+}
+
+fun ThemeMode.displayName(strings: LocalizedStrings): String {
+    return when (this) {
+        ThemeMode.System -> strings.get(R.string.theme_system)
+        ThemeMode.Light -> strings.get(R.string.theme_light)
+        ThemeMode.Dark -> strings.get(R.string.theme_dark)
+    }
+}
+
+fun AppLanguage.displayName(strings: LocalizedStrings): String {
+    return when (this) {
+        AppLanguage.System -> strings.get(R.string.language_system)
+        AppLanguage.English -> strings.get(R.string.language_english)
+        AppLanguage.ChineseSimplified -> strings.get(R.string.language_chinese_simplified)
+        AppLanguage.Russian -> strings.get(R.string.language_russian)
+        AppLanguage.French -> strings.get(R.string.language_french)
+        AppLanguage.German -> strings.get(R.string.language_german)
+        AppLanguage.Japanese -> strings.get(R.string.language_japanese)
+    }
+}

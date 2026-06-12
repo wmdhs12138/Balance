@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Balance</string>
+    <string name="app_description">Client Android pour consulter le solde des fournisseurs relais.</string>
+
+    <string name="settings_title">Paramètres</string>
+    <string name="settings_appearance">Apparence</string>
+    <string name="settings_dynamic_color">Couleur dynamique Material You</string>
+    <string name="settings_language">Langue</string>
+    <string name="settings_app_information">Informations sur l’application</string>
+    <string name="settings_local_data">Données locales</string>
+
+    <string name="theme_system">Système</string>
+    <string name="theme_light">Clair</string>
+    <string name="theme_dark">Sombre</string>
+
+    <string name="language_system">Système</string>
+    <string name="language_english">Anglais</string>
+    <string name="language_chinese_simplified">Chinois</string>
+    <string name="language_russian">Russe</string>
+    <string name="language_french">Français</string>
+    <string name="language_german">Allemand</string>
+    <string name="language_japanese">Japonais</string>
+
+    <string name="summary_ready_message">Fournisseurs prêts. Les données de connexion restent chiffrées sur cet appareil.</string>
+    <string name="message_refresh_complete">Actualisation terminée : %1$d prêt(s), %2$d connexion requise, %3$d échec(s)</string>
+    <string name="message_provider_refreshed">Fournisseur actualisé</string>
+    <string name="message_provider_refresh_failed">Échec de l’actualisation du fournisseur</string>
+    <string name="message_provider_added">Fournisseur ajouté</string>
+    <string name="message_provider_already_exists">Fournisseur déjà présent</string>
+    <string name="message_api_key_saved">API Key enregistrée localement</string>
+    <string name="message_parser_updated">Analyseur mis à jour</string>
+    <string name="message_provider_updated">Fournisseur mis à jour</string>
+    <string name="message_provider_deleted">Fournisseur supprimé</string>
+    <string name="message_provider_deleted_web_data_may_remain">Fournisseur supprimé. Certaines données de connexion WebView peuvent rester.</string>
+    <string name="message_local_data_cleared">Données locales effacées</string>
+    <string name="message_local_data_cleared_web_data_may_remain">Données locales effacées. Certaines données de connexion WebView peuvent rester.</string>
+
+    <string name="app_info_name">Nom</string>
+    <string name="app_info_version">Version</string>
+    <string name="app_info_license">Licence</string>
+    <string name="app_info_storage">Stockage</string>
+    <string name="app_info_storage_value">Local uniquement, données de connexion chiffrées</string>
+
+    <string name="action_add">Ajouter</string>
+    <string name="action_add_provider">Ajouter un fournisseur</string>
+    <string name="action_api_key">API Key</string>
+    <string name="action_cancel">Annuler</string>
+    <string name="action_close">Fermer</string>
+    <string name="action_clear">Effacer</string>
+    <string name="action_clear_local_data">Effacer les données locales</string>
+    <string name="action_delete">Supprimer</string>
+    <string name="action_login">Connexion</string>
+    <string name="action_refresh">Actualiser</string>
+    <string name="action_refresh_provider">Actualiser le fournisseur</string>
+    <string name="action_save">Enregistrer</string>
+    <string name="action_save_login">Enregistrer la connexion</string>
+    <string name="login_data_detected">Données de connexion détectées</string>
+    <string name="login_data_missing">Connectez-vous avant d’enregistrer</string>
+
+    <string name="field_api_key">API Key</string>
+    <string name="field_name">Nom</string>
+    <string name="field_parser">Analyseur</string>
+    <string name="field_provider_url">URL du fournisseur</string>
+    <string name="field_provider_url_invalid">Saisissez une URL de fournisseur valide</string>
+    <string name="field_provider_url_normalized">Sera enregistré comme %1$s</string>
+
+    <string name="status_failed">Échec</string>
+    <string name="status_forbidden">Accès refusé</string>
+    <string name="status_interface_not_found">Endpoint introuvable</string>
+    <string name="status_network_error">Erreur réseau</string>
+    <string name="status_parser_mismatch">Analyseur incompatible</string>
+    <string name="status_login_required">Connexion requise</string>
+    <string name="status_not_connected">Non connecté</string>
+    <string name="status_ready">Prêt</string>
+    <string name="status_timeout">Délai dépassé</string>
+
+    <string name="last_refresh_never">Aucune actualisation pour le moment</string>
+    <string name="last_refresh_attempt">Dernière actualisation : %1$s</string>
+    <string name="last_success_at">Réussie %1$s</string>
+    <string name="last_attempt_failed_at">Échec %1$s</string>
+    <string name="last_never_short">Jamais</string>
+
+    <string name="provider_settings_title">Fournisseur</string>
+    <string name="provider_error_details">Détails</string>
+    <string name="provider_section_actions">Actions</string>
+    <string name="provider_section_information">Informations</string>
+    <string name="provider_last_attempt">Dernière tentative</string>
+    <string name="provider_last_success">Dernière réussite</string>
+    <string name="add_provider_title">Ajouter un fournisseur</string>
+    <string name="default_provider_name">Fournisseur</string>
+    <string name="default_provider_name_custom">Fournisseur personnalisé</string>
+    <string name="delete_provider_title">Supprimer le fournisseur</string>
+    <string name="delete_provider_message">Supprimer %1$s et ses données de connexion locales ?</string>
+    <string name="clear_local_data_title">Effacer les données locales</string>
+    <string name="clear_local_data_message">Supprimer tous les fournisseurs, données de connexion chiffrées, API Key, cookies et cache WebView sur cet appareil ?</string>
+    <string name="local_data_description">Supprime les fournisseurs et les données de connexion locales de cet appareil.</string>
+    <string name="parser_account_summary">Résumé du compte</string>
+    <string name="parser_api_key">API Key</string>
+    <string name="parser_recommended">Recommandé</string>
+
+    <string name="content_description_encrypted_login_data">Données de connexion chiffrées</string>
+</resources>

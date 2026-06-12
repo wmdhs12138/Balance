@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Balance</string>
+    <string name="app_description">リレー事業者の残高を確認するための Android クライアントです。</string>
+
+    <string name="settings_title">設定</string>
+    <string name="settings_appearance">外観</string>
+    <string name="settings_dynamic_color">Material You の動的カラー</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_app_information">アプリ情報</string>
+    <string name="settings_local_data">ローカルデータ</string>
+
+    <string name="theme_system">システム</string>
+    <string name="theme_light">ライト</string>
+    <string name="theme_dark">ダーク</string>
+
+    <string name="language_system">システム</string>
+    <string name="language_english">英語</string>
+    <string name="language_chinese_simplified">中国語</string>
+    <string name="language_russian">ロシア語</string>
+    <string name="language_french">フランス語</string>
+    <string name="language_german">ドイツ語</string>
+    <string name="language_japanese">日本語</string>
+
+    <string name="summary_ready_message">プロバイダーは準備完了です。ログインデータはこの端末で暗号化して保存されます。</string>
+    <string name="message_refresh_complete">更新完了: 準備完了 %1$d、ログイン必要 %2$d、失敗 %3$d</string>
+    <string name="message_provider_refreshed">プロバイダーを更新しました</string>
+    <string name="message_provider_refresh_failed">プロバイダーの更新に失敗しました</string>
+    <string name="message_provider_added">プロバイダーを追加しました</string>
+    <string name="message_provider_already_exists">プロバイダーはすでに存在します</string>
+    <string name="message_api_key_saved">API Key をローカルに保存しました</string>
+    <string name="message_parser_updated">パーサーを更新しました</string>
+    <string name="message_provider_updated">プロバイダーを更新しました</string>
+    <string name="message_provider_deleted">プロバイダーを削除しました</string>
+    <string name="message_provider_deleted_web_data_may_remain">プロバイダーを削除しました。一部の WebView ログインデータが残っている可能性があります。</string>
+    <string name="message_local_data_cleared">ローカルデータを消去しました</string>
+    <string name="message_local_data_cleared_web_data_may_remain">ローカルデータを消去しました。一部の WebView ログインデータが残っている可能性があります。</string>
+
+    <string name="app_info_name">名前</string>
+    <string name="app_info_version">バージョン</string>
+    <string name="app_info_license">ライセンス</string>
+    <string name="app_info_storage">保存</string>
+    <string name="app_info_storage_value">ローカルのみ、ログインデータは暗号化</string>
+
+    <string name="action_add">追加</string>
+    <string name="action_add_provider">プロバイダーを追加</string>
+    <string name="action_api_key">API Key</string>
+    <string name="action_cancel">キャンセル</string>
+    <string name="action_close">閉じる</string>
+    <string name="action_clear">消去</string>
+    <string name="action_clear_local_data">ローカルデータを消去</string>
+    <string name="action_delete">削除</string>
+    <string name="action_login">ログイン</string>
+    <string name="action_refresh">更新</string>
+    <string name="action_refresh_provider">プロバイダーを更新</string>
+    <string name="action_save">保存</string>
+    <string name="action_save_login">ログインを保存</string>
+    <string name="login_data_detected">ログインデータを検出しました</string>
+    <string name="login_data_missing">先にログインしてから保存してください</string>
+
+    <string name="field_api_key">API Key</string>
+    <string name="field_name">名前</string>
+    <string name="field_parser">パーサー</string>
+    <string name="field_provider_url">プロバイダー URL</string>
+    <string name="field_provider_url_invalid">有効なプロバイダー URL を入力してください</string>
+    <string name="field_provider_url_normalized">%1$s として保存されます</string>
+
+    <string name="status_failed">失敗</string>
+    <string name="status_forbidden">アクセス拒否</string>
+    <string name="status_interface_not_found">エンドポイントなし</string>
+    <string name="status_network_error">ネットワークエラー</string>
+    <string name="status_parser_mismatch">パーサー不一致</string>
+    <string name="status_login_required">ログインが必要</string>
+    <string name="status_not_connected">未接続</string>
+    <string name="status_ready">準備完了</string>
+    <string name="status_timeout">タイムアウト</string>
+
+    <string name="last_refresh_never">まだ更新されていません</string>
+    <string name="last_refresh_attempt">最終更新: %1$s</string>
+    <string name="last_success_at">成功 %1$s</string>
+    <string name="last_attempt_failed_at">失敗 %1$s</string>
+    <string name="last_never_short">なし</string>
+
+    <string name="provider_settings_title">プロバイダー</string>
+    <string name="provider_error_details">詳細</string>
+    <string name="provider_section_actions">操作</string>
+    <string name="provider_section_information">情報</string>
+    <string name="provider_last_attempt">最終試行</string>
+    <string name="provider_last_success">最終成功</string>
+    <string name="add_provider_title">プロバイダーを追加</string>
+    <string name="default_provider_name">プロバイダー</string>
+    <string name="default_provider_name_custom">カスタムプロバイダー</string>
+    <string name="delete_provider_title">プロバイダーを削除</string>
+    <string name="delete_provider_message">%1$s とローカル保存されたログインデータを削除しますか？</string>
+    <string name="clear_local_data_title">ローカルデータを消去</string>
+    <string name="clear_local_data_message">この端末のすべてのプロバイダー、暗号化されたログインデータ、API Key、Cookie、WebView キャッシュを削除しますか？</string>
+    <string name="local_data_description">この端末からプロバイダーとローカル保存されたログインデータを削除します。</string>
+    <string name="parser_account_summary">アカウント概要</string>
+    <string name="parser_api_key">API Key</string>
+    <string name="parser_recommended">推奨</string>
+
+    <string name="content_description_encrypted_login_data">暗号化されたログインデータ</string>
+</resources>

@@ -1,0 +1,123 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: "zulu"
+          java-version: 21
+
+      - name: Check connectivity
+        run: |
+          echo "--- Testing connections ---"
+          for url in \
+            "https://dl.google.com" \
+            "https://maven.google.com" \
+            "https://maven.aliyun.com" \
+            "https://services.gradle.org"; do
+            echo -n "$url ... "
+            curl -sI --max-time 5 "$url" 2>&1 | head -1 || echo "FAILED"
+          done
+          echo "--- Java info ---"
+          java -version 2>&1
+
+      - name: Cache Gradle wrapper
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/wrapper/dists
+          key: gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+
+      - name: Pre-cache Gradle distribution
+        run: |
+          if [ ! -d ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo ]; then
+            echo "Downloading Gradle..."
+            curl -sL --retry 5 -o /tmp/gradle.zip \
+              "https://services.gradle.org/distributions/gradle-8.10.2-bin.zip"
+            unzip -q /tmp/gradle.zip -d /tmp/gradle-extracted
+            mkdir -p ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo
+            mv /tmp/gradle-extracted/gradle-8.10.2/* \
+              ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo/
+            touch ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo/gradle-8.10.2-bin.zip.ok
+            echo "Gradle pre-cached."
+          else
+            echo "Gradle already cached."
+          fi
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          validate-wrappers: false
+          cache-read-only: true
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
+
+      # ── Tag push (v*) → production signing + GitHub Release ──
+      - name: Decode production keystore
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          echo "${{ secrets.RELEASE_KEYSTORE }}" | base64 -d > ${{ github.workspace }}/release-keystore.jks
+
+      - name: Build APK (production)
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: ./gradlew assembleRelease --info --no-daemon
+        env:
+          JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.useSystemProxies=true"
+          GRADLE_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.useSystemProxies=true -Dhttps.protocols=TLSv1.2,TLSv1.3"
+          CI_KEYSTORE_PATH: ${{ github.workspace }}/release-keystore.jks
+          CI_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          CI_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          CI_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: app/build/outputs/apk/release/*.apk
+          generate_release_notes: true
+
+      # ── Push to main / PR → temporary CI signing ──
+      - name: Generate CI signing key
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          keytool -genkey -v \
+            -keystore ci-keystore.jks \
+            -storepass android-ci \
+            -alias ci-key \
+            -keypass android-ci \
+            -dname "CN=CI, OU=Unknown, O=Unknown, L=Unknown, ST=Unknown, C=Unknown" \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 7
+
+      - name: Build APK (CI)
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        run: ./gradlew assembleRelease --info --no-daemon
+        env:
+          GRADLE_OPTS: "-Djava.net.preferIPv4Stack=true"
+          CI_KEYSTORE_PATH: ${{ github.workspace }}/ci-keystore.jks
+          CI_KEYSTORE_PASSWORD: android-ci
+          CI_KEY_ALIAS: ci-key
+          CI_KEY_PASSWORD: android-ci
+
+      - name: Upload APK
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Balance-${{ github.ref_name }}
+          path: app/build/outputs/apk/release/*.apk
+          retention-days: 7

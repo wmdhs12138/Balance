@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Balance</string>
+    <string name="app_description">Android-Client zum Abfragen von Guthaben bei Relay-Anbietern.</string>
+
+    <string name="settings_title">Einstellungen</string>
+    <string name="settings_appearance">Darstellung</string>
+    <string name="settings_dynamic_color">Dynamische Material You-Farbe</string>
+    <string name="settings_language">Sprache</string>
+    <string name="settings_app_information">App-Informationen</string>
+    <string name="settings_local_data">Lokale Daten</string>
+
+    <string name="theme_system">System</string>
+    <string name="theme_light">Hell</string>
+    <string name="theme_dark">Dunkel</string>
+
+    <string name="language_system">System</string>
+    <string name="language_english">Englisch</string>
+    <string name="language_chinese_simplified">Chinesisch</string>
+    <string name="language_russian">Russisch</string>
+    <string name="language_french">Französisch</string>
+    <string name="language_german">Deutsch</string>
+    <string name="language_japanese">Japanisch</string>
+
+    <string name="summary_ready_message">Anbieter bereit. Anmeldedaten bleiben auf diesem Gerät verschlüsselt.</string>
+    <string name="message_refresh_complete">Aktualisierung abgeschlossen: %1$d bereit, %2$d Anmeldung nötig, %3$d fehlgeschlagen</string>
+    <string name="message_provider_refreshed">Anbieter aktualisiert</string>
+    <string name="message_provider_refresh_failed">Anbieter konnte nicht aktualisiert werden</string>
+    <string name="message_provider_added">Anbieter hinzugefügt</string>
+    <string name="message_provider_already_exists">Anbieter ist bereits vorhanden</string>
+    <string name="message_api_key_saved">API Key lokal gespeichert</string>
+    <string name="message_parser_updated">Parser aktualisiert</string>
+    <string name="message_provider_updated">Anbieter aktualisiert</string>
+    <string name="message_provider_deleted">Anbieter gelöscht</string>
+    <string name="message_provider_deleted_web_data_may_remain">Anbieter gelöscht. Einige WebView-Anmeldedaten können verbleiben.</string>
+    <string name="message_local_data_cleared">Lokale Daten gelöscht</string>
+    <string name="message_local_data_cleared_web_data_may_remain">Lokale Daten gelöscht. Einige WebView-Anmeldedaten können verbleiben.</string>
+
+    <string name="app_info_name">Name</string>
+    <string name="app_info_version">Version</string>
+    <string name="app_info_license">Lizenz</string>
+    <string name="app_info_storage">Speicher</string>
+    <string name="app_info_storage_value">Nur lokal, verschlüsselte Anmeldedaten</string>
+
+    <string name="action_add">Hinzufügen</string>
+    <string name="action_add_provider">Anbieter hinzufügen</string>
+    <string name="action_api_key">API Key</string>
+    <string name="action_cancel">Abbrechen</string>
+    <string name="action_close">Schließen</string>
+    <string name="action_clear">Löschen</string>
+    <string name="action_clear_local_data">Lokale Daten löschen</string>
+    <string name="action_delete">Löschen</string>
+    <string name="action_login">Anmelden</string>
+    <string name="action_refresh">Aktualisieren</string>
+    <string name="action_refresh_provider">Anbieter aktualisieren</string>
+    <string name="action_save">Speichern</string>
+    <string name="action_save_login">Anmeldung speichern</string>
+    <string name="login_data_detected">Anmeldedaten erkannt</string>
+    <string name="login_data_missing">Erst anmelden, dann speichern</string>
+
+    <string name="field_api_key">API Key</string>
+    <string name="field_name">Name</string>
+    <string name="field_parser">Parser</string>
+    <string name="field_provider_url">Anbieter-URL</string>
+    <string name="field_provider_url_invalid">Gültige Anbieter-URL eingeben</string>
+    <string name="field_provider_url_normalized">Wird gespeichert als %1$s</string>
+
+    <string name="status_failed">Fehlgeschlagen</string>
+    <string name="status_forbidden">Zugriff verweigert</string>
+    <string name="status_interface_not_found">Endpoint nicht gefunden</string>
+    <string name="status_network_error">Netzwerkfehler</string>
+    <string name="status_parser_mismatch">Parser passt nicht</string>
+    <string name="status_login_required">Anmeldung erforderlich</string>
+    <string name="status_not_connected">Nicht verbunden</string>
+    <string name="status_ready">Bereit</string>
+    <string name="status_timeout">Zeitüberschreitung</string>
+
+    <string name="last_refresh_never">Noch kein Aktualisierungsversuch</string>
+    <string name="last_refresh_attempt">Letzte Aktualisierung: %1$s</string>
+    <string name="last_success_at">Erfolg %1$s</string>
+    <string name="last_attempt_failed_at">Fehlgeschlagen %1$s</string>
+    <string name="last_never_short">Nie</string>
+
+    <string name="provider_settings_title">Anbieter</string>
+    <string name="provider_error_details">Details</string>
+    <string name="provider_section_actions">Aktionen</string>
+    <string name="provider_section_information">Informationen</string>
+    <string name="provider_last_attempt">Letzter Versuch</string>
+    <string name="provider_last_success">Letzter Erfolg</string>
+    <string name="add_provider_title">Anbieter hinzufügen</string>
+    <string name="default_provider_name">Anbieter</string>
+    <string name="default_provider_name_custom">Benutzerdefinierter Anbieter</string>
+    <string name="delete_provider_title">Anbieter löschen</string>
+    <string name="delete_provider_message">%1$s und die lokal gespeicherten Anmeldedaten löschen?</string>
+    <string name="clear_local_data_title">Lokale Daten löschen</string>
+    <string name="clear_local_data_message">Alle Anbieter, verschlüsselten Anmeldedaten, API Keys, Cookies und den WebView-Cache auf diesem Gerät löschen?</string>
+    <string name="local_data_description">Entfernt Anbieter und lokal gespeicherte Anmeldedaten von diesem Gerät.</string>
+    <string name="parser_account_summary">Kontoübersicht</string>
+    <string name="parser_api_key">API Key</string>
+    <string name="parser_recommended">Empfohlen</string>
+
+    <string name="content_description_encrypted_login_data">Verschlüsselte Anmeldedaten</string>
+</resources>

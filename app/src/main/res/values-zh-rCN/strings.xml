@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Balance</string>
+    <string name="app_description">为查询中转站余额专门开发的 Android 客户端。</string>
+
+    <string name="settings_title">设置</string>
+    <string name="settings_appearance">外观</string>
+    <string name="settings_dynamic_color">Material You 动态取色</string>
+    <string name="settings_language">语言</string>
+    <string name="settings_app_information">应用信息</string>
+    <string name="settings_local_data">本地数据</string>
+
+    <string name="theme_system">跟随系统</string>
+    <string name="theme_light">浅色</string>
+    <string name="theme_dark">深色</string>
+
+    <string name="language_system">跟随系统</string>
+    <string name="language_english">英语</string>
+    <string name="language_chinese_simplified">中文</string>
+    <string name="language_russian">俄语</string>
+    <string name="language_french">法语</string>
+    <string name="language_german">德语</string>
+    <string name="language_japanese">日语</string>
+
+    <string name="summary_ready_message">供应商已就绪。登录数据仅在本机加密保存。</string>
+    <string name="message_refresh_complete">刷新完成：%1$d 个就绪，%2$d 个需登录，%3$d 个失败</string>
+    <string name="message_provider_refreshed">供应商已刷新</string>
+    <string name="message_provider_refresh_failed">供应商刷新失败</string>
+    <string name="message_provider_added">供应商已添加</string>
+    <string name="message_provider_already_exists">供应商已存在</string>
+    <string name="message_api_key_saved">API Key 已在本地保存</string>
+    <string name="message_parser_updated">解析器已更新</string>
+    <string name="message_provider_updated">供应商已更新</string>
+    <string name="message_provider_deleted">供应商已删除</string>
+    <string name="message_provider_deleted_web_data_may_remain">供应商已删除，部分 WebView 登录数据可能仍保留。</string>
+    <string name="message_local_data_cleared">本地数据已清除</string>
+    <string name="message_local_data_cleared_web_data_may_remain">本地数据已清除，部分 WebView 登录数据可能仍保留。</string>
+
+    <string name="app_info_name">名称</string>
+    <string name="app_info_version">版本</string>
+    <string name="app_info_license">许可证</string>
+    <string name="app_info_storage">存储</string>
+    <string name="app_info_storage_value">仅本地存储，加密登录数据</string>
+
+    <string name="action_add">添加</string>
+    <string name="action_add_provider">添加供应商</string>
+    <string name="action_api_key">API Key</string>
+    <string name="action_cancel">取消</string>
+    <string name="action_close">关闭</string>
+    <string name="action_clear">清除</string>
+    <string name="action_clear_local_data">清除本地数据</string>
+    <string name="action_delete">删除</string>
+    <string name="action_login">登录</string>
+    <string name="action_refresh">刷新</string>
+    <string name="action_refresh_provider">刷新供应商</string>
+    <string name="action_save">保存</string>
+    <string name="action_save_login">保存登录</string>
+    <string name="login_data_detected">已检测到登录数据</string>
+    <string name="login_data_missing">请先登录，再保存</string>
+
+    <string name="field_api_key">API Key</string>
+    <string name="field_name">名称</string>
+    <string name="field_parser">解析器</string>
+    <string name="field_provider_url">供应商网址</string>
+    <string name="field_provider_url_invalid">请输入有效的供应商网址</string>
+    <string name="field_provider_url_normalized">将保存为 %1$s</string>
+
+    <string name="status_failed">失败</string>
+    <string name="status_forbidden">访问被拒绝</string>
+    <string name="status_interface_not_found">接口不存在</string>
+    <string name="status_network_error">网络错误</string>
+    <string name="status_parser_mismatch">解析器不匹配</string>
+    <string name="status_login_required">需要登录</string>
+    <string name="status_not_connected">未连接</string>
+    <string name="status_ready">就绪</string>
+    <string name="status_timeout">请求超时</string>
+
+    <string name="last_refresh_never">尚未刷新</string>
+    <string name="last_refresh_attempt">上次刷新 %1$s</string>
+    <string name="last_success_at">成功 %1$s</string>
+    <string name="last_attempt_failed_at">失败 %1$s</string>
+    <string name="last_never_short">从未</string>
+
+    <string name="provider_settings_title">供应商</string>
+    <string name="provider_error_details">详情</string>
+    <string name="provider_section_actions">操作</string>
+    <string name="provider_section_information">信息</string>
+    <string name="provider_last_attempt">上次尝试</string>
+    <string name="provider_last_success">上次成功</string>
+    <string name="add_provider_title">添加供应商</string>
+    <string name="default_provider_name">供应商</string>
+    <string name="default_provider_name_custom">自定义供应商</string>
+    <string name="delete_provider_title">删除供应商</string>
+    <string name="delete_provider_message">删除 %1$s 及其本地保存的登录数据？</string>
+    <string name="clear_local_data_title">清除本地数据</string>
+    <string name="clear_local_data_message">删除此设备上的所有供应商、加密登录数据、API Key、Cookie 和 WebView 缓存？</string>
+    <string name="local_data_description">从此设备移除供应商和本地保存的登录数据。</string>
+    <string name="parser_account_summary">账户摘要</string>
+    <string name="parser_api_key">API Key</string>
+    <string name="parser_recommended">推荐</string>
+
+    <string name="content_description_encrypted_login_data">加密登录数据</string>
+</resources>

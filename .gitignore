@@ -1,0 +1,44 @@
+# --- Tool-specific (local only, not for GitHub) ---
+.agents/
+.codex/
+.claude/
+
+# --- Gradle ---
+.gradle/
+**/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# --- IDE ---
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+
+# --- Android ---
+local.properties
+*.apk
+*.aab
+*.ap_
+*.aab_
+*.dex
+*.class
+*.hprof
+*.keystore
+*.jks
+*.jks.bk
+
+# --- Kotlin ---
+.kotlin/
+
+# --- Native ---
+captures/
+.externalNativeBuild/
+.cxx/
+*.so
+
+# --- OS ---
+Thumbs.db
+*.swp
+*.swo
+*~

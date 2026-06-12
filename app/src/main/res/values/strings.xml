@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Translation interface: copy this file to app/src/main/res/values-xx/strings.xml and translate only string values. Keep all names unchanged. -->
+    <string name="app_name">Balance</string>
+    <string name="app_description">Android client for querying relay station balances.</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_dynamic_color">Material You dynamic color</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_app_information">App information</string>
+    <string name="settings_local_data">Local data</string>
+
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+
+    <string name="language_system">System</string>
+    <string name="language_english">English</string>
+    <string name="language_chinese_simplified">Chinese</string>
+    <string name="language_russian">Russian</string>
+    <string name="language_french">French</string>
+    <string name="language_german">German</string>
+    <string name="language_japanese">Japanese</string>
+
+    <string name="summary_ready_message">Providers ready. Login data stays encrypted on this device.</string>
+    <string name="message_refresh_complete">Refresh complete: %1$d ready, %2$d need login, %3$d failed</string>
+    <string name="message_provider_refreshed">Provider refreshed</string>
+    <string name="message_provider_refresh_failed">Provider refresh failed</string>
+    <string name="message_provider_added">Provider added</string>
+    <string name="message_provider_already_exists">Provider already exists</string>
+    <string name="message_api_key_saved">API key saved locally</string>
+    <string name="message_parser_updated">Parser updated</string>
+    <string name="message_provider_updated">Provider updated</string>
+    <string name="message_provider_deleted">Provider deleted</string>
+    <string name="message_provider_deleted_web_data_may_remain">Provider deleted. Some WebView login data may remain.</string>
+    <string name="message_local_data_cleared">Local data cleared</string>
+    <string name="message_local_data_cleared_web_data_may_remain">Local data cleared. Some WebView login data may remain.</string>
+
+    <string name="app_info_name">Name</string>
+    <string name="app_info_version">Version</string>
+    <string name="app_info_license">License</string>
+    <string name="app_info_storage">Storage</string>
+    <string name="app_info_storage_value">Local only, encrypted login data</string>
+
+    <string name="action_add">Add</string>
+    <string name="action_add_provider">Add provider</string>
+    <string name="action_api_key">API Key</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_close">Close</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_clear_local_data">Clear local data</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_login">Login</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_refresh_provider">Refresh provider</string>
+    <string name="action_save">Save</string>
+    <string name="action_save_login">Save login</string>
+    <string name="login_data_detected">Login data detected</string>
+    <string name="login_data_missing">Login first, then save</string>
+
+    <string name="field_api_key">API Key</string>
+    <string name="field_name">Name</string>
+    <string name="field_parser">Parser</string>
+    <string name="field_provider_url">Provider URL</string>
+    <string name="field_provider_url_invalid">Enter a valid provider URL</string>
+    <string name="field_provider_url_normalized">Saved as %1$s</string>
+
+    <string name="status_failed">Failed</string>
+    <string name="status_forbidden">Access denied</string>
+    <string name="status_interface_not_found">Endpoint not found</string>
+    <string name="status_network_error">Network error</string>
+    <string name="status_parser_mismatch">Parser mismatch</string>
+    <string name="status_login_required">Login required</string>
+    <string name="status_not_connected">Not connected</string>
+    <string name="status_ready">Ready</string>
+    <string name="status_timeout">Timed out</string>
+
+    <string name="last_refresh_never">No refresh attempt yet</string>
+    <string name="last_refresh_attempt">Last refresh attempt %1$s</string>
+    <string name="last_success_at">Success %1$s</string>
+    <string name="last_attempt_failed_at">Failed %1$s</string>
+    <string name="last_never_short">Never</string>
+
+    <string name="provider_settings_title">Provider</string>
+    <string name="provider_error_details">Details</string>
+    <string name="provider_section_actions">Actions</string>
+    <string name="provider_section_information">Information</string>
+    <string name="provider_last_attempt">Last attempt</string>
+    <string name="provider_last_success">Last success</string>
+    <string name="add_provider_title">Add provider</string>
+    <string name="default_provider_name">Provider</string>
+    <string name="default_provider_name_custom">Custom Provider</string>
+    <string name="delete_provider_title">Delete provider</string>
+    <string name="delete_provider_message">Delete %1$s and its locally stored login data?</string>
+    <string name="clear_local_data_title">Clear local data</string>
+    <string name="clear_local_data_message">Delete all providers, encrypted login data, API keys, cookies, and WebView cache on this device?</string>
+    <string name="local_data_description">Removes providers and locally stored login data from this device.</string>
+    <string name="parser_account_summary">Account Summary</string>
+    <string name="parser_api_key">API Key</string>
+    <string name="parser_recommended">Recommended</string>
+
+    <string name="content_description_encrypted_login_data">Encrypted login data</string>
+</resources>

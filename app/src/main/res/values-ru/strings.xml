@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Balance</string>
+    <string name="app_description">Android-клиент для проверки баланса relay-провайдеров.</string>
+
+    <string name="settings_title">Настройки</string>
+    <string name="settings_appearance">Оформление</string>
+    <string name="settings_dynamic_color">Динамические цвета Material You</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_app_information">Информация о приложении</string>
+    <string name="settings_local_data">Локальные данные</string>
+
+    <string name="theme_system">Системная</string>
+    <string name="theme_light">Светлая</string>
+    <string name="theme_dark">Темная</string>
+
+    <string name="language_system">Системный</string>
+    <string name="language_english">Английский</string>
+    <string name="language_chinese_simplified">Китайский</string>
+    <string name="language_russian">Русский</string>
+    <string name="language_french">Французский</string>
+    <string name="language_german">Немецкий</string>
+    <string name="language_japanese">Японский</string>
+
+    <string name="summary_ready_message">Провайдеры готовы. Данные входа зашифрованы только на этом устройстве.</string>
+    <string name="message_refresh_complete">Обновление завершено: готово %1$d, нужен вход %2$d, ошибок %3$d</string>
+    <string name="message_provider_refreshed">Провайдер обновлен</string>
+    <string name="message_provider_refresh_failed">Не удалось обновить провайдера</string>
+    <string name="message_provider_added">Провайдер добавлен</string>
+    <string name="message_provider_already_exists">Провайдер уже существует</string>
+    <string name="message_api_key_saved">API Key сохранен локально</string>
+    <string name="message_parser_updated">Парсер обновлен</string>
+    <string name="message_provider_updated">Провайдер обновлен</string>
+    <string name="message_provider_deleted">Провайдер удален</string>
+    <string name="message_provider_deleted_web_data_may_remain">Провайдер удален. Часть данных входа WebView может остаться.</string>
+    <string name="message_local_data_cleared">Локальные данные очищены</string>
+    <string name="message_local_data_cleared_web_data_may_remain">Локальные данные очищены. Часть данных входа WebView может остаться.</string>
+
+    <string name="app_info_name">Название</string>
+    <string name="app_info_version">Версия</string>
+    <string name="app_info_license">Лицензия</string>
+    <string name="app_info_storage">Хранилище</string>
+    <string name="app_info_storage_value">Только локально, данные входа зашифрованы</string>
+
+    <string name="action_add">Добавить</string>
+    <string name="action_add_provider">Добавить провайдера</string>
+    <string name="action_api_key">API Key</string>
+    <string name="action_cancel">Отмена</string>
+    <string name="action_close">Закрыть</string>
+    <string name="action_clear">Очистить</string>
+    <string name="action_clear_local_data">Очистить локальные данные</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_login">Войти</string>
+    <string name="action_refresh">Обновить</string>
+    <string name="action_refresh_provider">Обновить провайдера</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_save_login">Сохранить вход</string>
+    <string name="login_data_detected">Данные входа обнаружены</string>
+    <string name="login_data_missing">Сначала войдите, затем сохраните</string>
+
+    <string name="field_api_key">API Key</string>
+    <string name="field_name">Название</string>
+    <string name="field_parser">Парсер</string>
+    <string name="field_provider_url">URL провайдера</string>
+    <string name="field_provider_url_invalid">Введите действительный URL провайдера</string>
+    <string name="field_provider_url_normalized">Будет сохранено как %1$s</string>
+
+    <string name="status_failed">Ошибка</string>
+    <string name="status_forbidden">Доступ запрещен</string>
+    <string name="status_interface_not_found">Endpoint не найден</string>
+    <string name="status_network_error">Ошибка сети</string>
+    <string name="status_parser_mismatch">Парсер не подходит</string>
+    <string name="status_login_required">Требуется вход</string>
+    <string name="status_not_connected">Не подключено</string>
+    <string name="status_ready">Готово</string>
+    <string name="status_timeout">Тайм-аут</string>
+
+    <string name="last_refresh_never">Обновлений еще не было</string>
+    <string name="last_refresh_attempt">Последнее обновление: %1$s</string>
+    <string name="last_success_at">Успешно %1$s</string>
+    <string name="last_attempt_failed_at">Ошибка %1$s</string>
+    <string name="last_never_short">Никогда</string>
+
+    <string name="provider_settings_title">Провайдер</string>
+    <string name="provider_error_details">Подробности</string>
+    <string name="provider_section_actions">Действия</string>
+    <string name="provider_section_information">Информация</string>
+    <string name="provider_last_attempt">Последняя попытка</string>
+    <string name="provider_last_success">Последний успех</string>
+    <string name="add_provider_title">Добавить провайдера</string>
+    <string name="default_provider_name">Провайдер</string>
+    <string name="default_provider_name_custom">Пользовательский провайдер</string>
+    <string name="delete_provider_title">Удалить провайдера</string>
+    <string name="delete_provider_message">Удалить %1$s и локально сохраненные данные входа?</string>
+    <string name="clear_local_data_title">Очистить локальные данные</string>
+    <string name="clear_local_data_message">Удалить всех провайдеров, зашифрованные данные входа, API Key, cookies и кэш WebView на этом устройстве?</string>
+    <string name="local_data_description">Удаляет провайдеров и локально сохраненные данные входа с этого устройства.</string>
+    <string name="parser_account_summary">Сводка аккаунта</string>
+    <string name="parser_api_key">API Key</string>
+    <string name="parser_recommended">Рекомендуется</string>
+
+    <string name="content_description_encrypted_login_data">Зашифрованные данные входа</string>
+</resources>
