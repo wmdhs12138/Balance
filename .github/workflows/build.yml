@@ -15,6 +15,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Disable local Gradle proxy in CI
+        run: sed -i '/^systemProp\..*\.proxy/d' gradle.properties
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
@@ -35,24 +38,11 @@ jobs:
           echo "--- Java info ---"
           java -version 2>&1
 
-      - name: Check Gradle artifacts
-        run: |
-          echo "--- Testing Gradle artifact URLs ---"
-          for url in \
-            "https://maven.aliyun.com/repository/google/com/android/tools/build/gradle/8.7.3/gradle-8.7.3.pom" \
-            "https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.7.3/gradle-8.7.3.pom" \
-            "https://maven.aliyun.com/repository/google/com/android/application/com.android.application.gradle.plugin/8.7.3/com.android.application.gradle.plugin-8.7.3.pom" \
-            "https://dl.google.com/dl/android/maven2/com/android/application/com.android.application.gradle.plugin/8.7.3/com.android.application.gradle.plugin-8.7.3.pom"; do
-            echo -n "$url ... "
-            curl -L -s -o /dev/null -w "%{http_code}\n" --max-time 20 "$url" || echo "FAILED"
-          done
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.10.2"
           validate-wrappers: true
-          cache-disabled: true
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -65,7 +55,7 @@ jobs:
 
       - name: Build APK (production)
         if: startsWith(github.ref, 'refs/tags/v')
-        run: gradle assembleRelease --refresh-dependencies --info --no-daemon
+        run: gradle assembleRelease --info --no-daemon
         env:
           JAVA_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.useSystemProxies=true"
           GRADLE_OPTS: "-Djava.net.preferIPv4Stack=true -Djava.net.useSystemProxies=true -Dhttps.protocols=TLSv1.2,TLSv1.3"
@@ -97,7 +87,7 @@ jobs:
 
       - name: Build APK (CI)
         if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        run: gradle assembleRelease --refresh-dependencies --info --no-daemon
+        run: gradle assembleRelease --info --no-daemon
         env:
           GRADLE_OPTS: "-Djava.net.preferIPv4Stack=true"
           CI_KEYSTORE_PATH: ${{ github.workspace }}/ci-keystore.jks
