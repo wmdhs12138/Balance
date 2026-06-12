@@ -35,33 +35,10 @@ jobs:
           echo "--- Java info ---"
           java -version 2>&1
 
-      - name: Cache Gradle wrapper
-        uses: actions/cache@v4
-        with:
-          path: ~/.gradle/wrapper/dists
-          key: gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-
-      - name: Pre-cache Gradle distribution
-        run: |
-          if [ ! -d ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo ]; then
-            echo "Downloading Gradle..."
-            curl -sL --retry 5 -o /tmp/gradle.zip \
-              "https://services.gradle.org/distributions/gradle-8.10.2-bin.zip"
-            unzip -q /tmp/gradle.zip -d /tmp/gradle-extracted
-            mkdir -p ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo
-            mv /tmp/gradle-extracted/gradle-8.10.2/* \
-              ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo/
-            touch ~/.gradle/wrapper/dists/gradle-8.10.2-bin/a04bxjujx95o3nb99gddekhwo/gradle-8.10.2-bin.zip.ok
-            echo "Gradle pre-cached."
-          else
-            echo "Gradle already cached."
-          fi
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          validate-wrappers: false
-          cache-read-only: true
+          validate-wrappers: true
 
       - name: Grant execute permission
         run: chmod +x gradlew
