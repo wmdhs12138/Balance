@@ -3,13 +3,38 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Material Design 3 adaptive foreground: simple, rounded, tonal, centered in the safe zone. -->
     <path
-        android:fillColor="#006C4F"
-        android:pathData="M25,31h58c5.5,0 10,4.5 10,10v35c0,5.5 -4.5,10 -10,10H25c-5.5,0 -10,-4.5 -10,-10V41c0,-5.5 4.5,-10 10,-10z" />
+        android:fillColor="#305DA8"
+        android:pathData="M40,28h28a16,16 0,0 1,16 16v24a16,16 0,0 1,-16 16H40a16,16 0,0 1,-16 -16V44a16,16 0,0 1,16 -16z" />
+
+    <!-- Soft tonal top card layer -->
+    <path
+        android:fillColor="#B8C8FF"
+        android:fillAlpha="0.82"
+        android:pathData="M40,36h28a8,8 0,0 1,8 8v5H36a7,7 0,0 1,0 -14h4z" />
+
+    <!-- Balance amount lines -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M27,46h54v6H27zM27,61h32v6H27zM68,61h13v6H68z" />
+        android:fillAlpha="0.96"
+        android:pathData="M38,58h17a3,3 0,0 1,0 6H38a3,3 0,0 1,0 -6z" />
     <path
-        android:fillColor="#76DBB8"
-        android:pathData="M72,72m-6,0a6,6 0,1 0,12 0a6,6 0,1 0,-12 0" />
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.72"
+        android:pathData="M38,68h11a2.5,2.5 0,0 1,0 5H38a2.5,2.5 0,0 1,0 -5z" />
+
+    <!-- Tonal coin / balance marker -->
+    <path
+        android:fillColor="#006C51"
+        android:pathData="M69,54m-13,0a13,13 0,1 0,26 0a13,13 0,1 0,-26 0" />
+    <path
+        android:fillColor="#8EF4D2"
+        android:fillAlpha="0.92"
+        android:pathData="M69,48m-4,0a4,4 0,1 0,8 0a4,4 0,1 0,-8 0" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.90"
+        android:pathData="M64,58h10a2.5,2.5 0,0 1,0 5H64a2.5,2.5 0,0 1,0 -5z" />
 </vector>

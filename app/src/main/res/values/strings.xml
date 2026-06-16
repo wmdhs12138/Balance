@@ -96,9 +96,18 @@
     <string name="clear_local_data_title">Clear local data</string>
     <string name="clear_local_data_message">Delete all providers, encrypted login data, API keys, cookies, and WebView cache on this device?</string>
     <string name="local_data_description">Removes providers and locally stored login data from this device.</string>
-    <string name="parser_account_summary">Account Summary</string>
     <string name="parser_api_key">API Key</string>
     <string name="parser_recommended">Recommended</string>
+
+    <string name="field_balance_unit">Balance unit</string>
+    <string name="balance_unit_auto">Auto</string>
+    <string name="balance_unit_cny">¥ CNY</string>
+    <string name="balance_unit_usd">$ USD</string>
+    <string name="balance_unit_points">Points</string>
+    <string name="balance_unit_credits">Credits</string>
+    <string name="balance_unit_quota">Quota</string>
+    <string name="balance_unit_tokens">Tokens</string>
+    <string name="balance_unit_unknown">No unit</string>
 
     <string name="content_description_encrypted_login_data">Encrypted login data</string>
 </resources>

@@ -6,6 +6,7 @@ import io.github.wmdhs12138.balance.core.crypto.LoginDataCipher
 import io.github.wmdhs12138.balance.core.database.AppDatabase
 import io.github.wmdhs12138.balance.core.preferences.SettingsRepository
 
+/** AppContainer 类。 */
 class AppContainer(context: Context) {
     private val database = AppDatabase.getInstance(context)
 

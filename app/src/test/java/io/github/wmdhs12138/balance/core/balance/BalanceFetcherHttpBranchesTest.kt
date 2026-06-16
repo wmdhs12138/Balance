@@ -89,25 +89,6 @@ class BalanceFetcherHttpBranchesTest {
         assertEquals(BalanceFetchFailureReason.ParserMismatch, exception.reason)
     }
 
-    @Test
-    fun accountSummaryMapsUnauthorizedToNeedsLogin() = runBlocking {
-        val fetcher = AccountSummaryBalanceFetcher(
-            FakeBalanceHttpClient(
-                HttpResponse(
-                    statusCode = 401,
-                    contentType = "application/json",
-                    body = """{"message":"expired"}""",
-                ),
-            ),
-        )
-
-        val exception = assertBalanceFetchException {
-            fetcher.fetch(provider(), apiKeyPayload("sk-test"))
-        }
-
-        assertEquals(BalanceFetchFailureReason.NeedsLogin, exception.reason)
-    }
-
     private fun provider(): ProviderEntity = ProviderEntity(
         id = 1,
         name = "Test",

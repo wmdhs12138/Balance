@@ -2,13 +2,16 @@ package io.github.wmdhs12138.balance.core.net
 
 import java.net.URI
 
+/** NormalizedUrl 数据结构。 */
 data class NormalizedUrl(
     val displayUrl: String,
     val origin: String,
     val host: String,
 )
 
+/** UrlNormalizer 单例对象。 */
 object UrlNormalizer {
+    /** 处理normalize 方法。 */
     fun normalize(rawUrl: String): NormalizedUrl? {
         val withScheme = rawUrl.trim().withDefaultScheme()
         if (withScheme.isBlank()) return null
@@ -29,15 +32,19 @@ object UrlNormalizer {
         )
     }
 
+    /** 处理webUrl 方法。 */
     fun webUrl(rawUrl: String): String? = normalize(rawUrl)?.displayUrl
 
+    /** 处理origin 方法。 */
     fun origin(rawUrl: String): String? = normalize(rawUrl)?.origin
 
+    /** 处理endpoint 方法。 */
     fun endpoint(baseUrl: String, path: String): String {
         val base = origin(baseUrl) ?: baseUrl.trim().trimEnd('/')
         return base + "/" + path.trimStart('/')
     }
 
+    /** 处理withDefaultScheme 方法。 */
     private fun String.withDefaultScheme(): String {
         return if (startsWith("http://", ignoreCase = true) || startsWith("https://", ignoreCase = true)) {
             this

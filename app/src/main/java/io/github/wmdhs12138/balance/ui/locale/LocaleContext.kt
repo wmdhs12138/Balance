@@ -12,6 +12,7 @@ import io.github.wmdhs12138.balance.core.model.AppLanguage
 import java.util.Locale
 
 @Composable
+/** 提供本地化上下文 方法。 */
 fun ProvideLocalizedContext(
     language: AppLanguage,
     content: @Composable () -> Unit,
@@ -27,6 +28,7 @@ fun ProvideLocalizedContext(
     }
 }
 
+/** 创建本地化上下文 方法。 */
 fun Context.localized(language: AppLanguage): Context {
     val locale = language.languageTag
         ?.let(Locale::forLanguageTag)

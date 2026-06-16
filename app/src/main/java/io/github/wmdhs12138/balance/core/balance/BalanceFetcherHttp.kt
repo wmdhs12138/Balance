@@ -1,9 +1,11 @@
 package io.github.wmdhs12138.balance.core.balance
 
+/** 处理bearerToken 方法。 */
 internal fun bearerToken(token: String): String {
     return if (token.startsWith("Bearer ", ignoreCase = true)) token else "Bearer $token"
 }
 
+/** 处理ensureJsonSuccess 方法。 */
 internal fun HttpResponse.ensureJsonSuccess(parserName: String, action: String) {
     if (statusCode !in 200..299) {
         throw BalanceFetchException(
@@ -19,6 +21,7 @@ internal fun HttpResponse.ensureJsonSuccess(parserName: String, action: String) 
     }
 }
 
+/** 处理failureMessage 方法。 */
 internal fun HttpResponse.failureMessage(prefix: String): String {
     val serverMessage = BalanceJsonExtractor.errorMessage(body)
     return if (serverMessage.isNullOrBlank()) {

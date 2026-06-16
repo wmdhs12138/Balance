@@ -2,6 +2,8 @@ package io.github.wmdhs12138.balance.feature.main
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -11,8 +13,8 @@ import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -31,7 +33,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.Card
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -64,6 +66,7 @@ import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
+/** 渲染服务商卡片 方法。 */
 fun ProviderCard(
     provider: Provider,
     strings: LocalizedStrings,
@@ -84,10 +87,16 @@ fun ProviderCard(
         label = "provider-refresh-rotation",
     )
 
-    Card(
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+    ElevatedCard(
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
+        elevation = CardDefaults.elevatedCardElevation(
+            defaultElevation = 1.dp,
+            pressedElevation = 1.dp,
+            focusedElevation = 2.dp,
+        ),
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
@@ -95,21 +104,29 @@ fun ProviderCard(
                 onLongClick = onLongPress,
             ),
     ) {
-        Column(
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp),
+        Row(
+            modifier = Modifier.padding(horizontal = 14.dp, vertical = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
+            ProviderStatusBar(
+                status = provider.status,
+                hasCachedBalance = provider.hasDisplayBalance,
+            )
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Row(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(6.dp),
                 ) {
-                    Text(
+                    Row(
+                        modifier = Modifier.weight(1f),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    ) {
+                        Text(
                         provider.name,
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
@@ -117,13 +134,13 @@ fun ProviderCard(
                         overflow = TextOverflow.Ellipsis,
                         modifier = Modifier.weight(1f, fill = false),
                     )
-                    ProviderParserTag(
+                        ProviderParserTag(
                         label = provider.parserLabelForCard,
                         status = provider.status,
                         hasCachedBalance = provider.hasDisplayBalance,
                     )
-                }
-                ProviderActionButton(
+                    }
+                    ProviderActionButton(
                     onClick = onRefresh,
                     enabled = !refreshing,
                     contentDescription = strings.get(R.string.action_refresh_provider),
@@ -194,213 +211,4 @@ fun ProviderCard(
         }
     }
 }
-
-@Composable
-private fun AnimatedBalanceLabel(
-    provider: Provider,
-    strings: LocalizedStrings,
-) {
-    val normalizedBalance = provider.balanceText?.normalizeBalanceText()
-    var lastAnimatedBalance by remember(provider.id) { mutableStateOf(normalizedBalance) }
-    var balancePulse by remember(provider.id) { mutableStateOf(false) }
-    val pulseColor by animateColorAsState(
-        targetValue = if (balancePulse && provider.hasDisplayBalance) {
-            MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.34f)
-        } else {
-            Color.Transparent
-        },
-        animationSpec = tween(durationMillis = 420),
-        label = "balance-change-pulse",
-    )
-
-    LaunchedEffect(normalizedBalance) {
-        if (!lastAnimatedBalance.isNullOrBlank() &&
-            !normalizedBalance.isNullOrBlank() &&
-            lastAnimatedBalance != normalizedBalance
-        ) {
-            balancePulse = true
-            delay(460)
-            balancePulse = false
-        }
-        lastAnimatedBalance = normalizedBalance
-    }
-
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(6.dp))
-            .background(pulseColor)
-            .padding(horizontal = 2.dp, vertical = 1.dp),
-    ) {
-        AnimatedContent(
-            targetState = BalanceLabelState(
-                text = provider.displayBalanceOrStatusText(strings),
-                hasBalance = provider.hasDisplayBalance,
-            ),
-            transitionSpec = {
-                (
-                    fadeIn(animationSpec = tween(durationMillis = 180)) +
-                        slideInVertically(
-                            animationSpec = tween(durationMillis = 260),
-                            initialOffsetY = { it / 3 },
-                        )
-                    ).togetherWith(
-                        fadeOut(animationSpec = tween(durationMillis = 120)) +
-                            slideOutVertically(
-                                animationSpec = tween(durationMillis = 180),
-                                targetOffsetY = { -it / 4 },
-                            ),
-                    ).using(SizeTransform(clip = false))
-            },
-            label = "balance-label-change",
-        ) { state ->
-            Text(
-                text = state.text,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = if (state.hasBalance) FontWeight.Bold else FontWeight.SemiBold,
-                color = if (state.hasBalance) {
-                    Color.Unspecified
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-    }
-}
-
-private data class BalanceLabelState(
-    val text: AnnotatedString,
-    val hasBalance: Boolean,
-)
-
-@Composable
-private fun ProviderActionButton(
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    contentDescription: String,
-    content: @Composable () -> Unit,
-) {
-    val contentColor = if (enabled) {
-        MaterialTheme.colorScheme.onSurfaceVariant
-    } else {
-        MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.38f)
-    }
-    Surface(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = modifier
-            .size(34.dp)
-            .semantics { this.contentDescription = contentDescription },
-        shape = RoundedCornerShape(8.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.62f),
-        contentColor = contentColor,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center,
-        ) {
-            content()
-        }
-    }
-}
-
-@Composable
-private fun Provider.displayBalanceOrStatusText(strings: LocalizedStrings): AnnotatedString {
-    val balance = balanceText?.normalizeBalanceText()
-    return if (!balance.isNullOrBlank()) {
-        balance.withCompactCurrencySymbol()
-    } else {
-        AnnotatedString(lastErrorText?.friendlyErrorLabel(strings) ?: status.label(strings))
-    }
-}
-
-@Composable
-private fun String.withCompactCurrencySymbol(): AnnotatedString {
-    val match = Regex("^([¥$])\\s+(.+)$").matchEntire(this) ?: return AnnotatedString(this)
-    return buildAnnotatedString {
-        pushStyle(
-            SpanStyle(
-                fontSize = MaterialTheme.typography.titleMedium.fontSize,
-                fontWeight = FontWeight.SemiBold,
-                baselineShift = BaselineShift(0.08f),
-            ),
-        )
-        append(match.groupValues[1])
-        pop()
-        append(" ")
-        append(match.groupValues[2])
-    }
-}
-
-@Composable
-private fun ProviderParserTag(
-    label: String,
-    status: BalanceStatus,
-    hasCachedBalance: Boolean,
-) {
-    Surface(
-        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.74f),
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-        shape = RoundedCornerShape(6.dp),
-    ) {
-        Row(
-            modifier = Modifier.padding(horizontal = 6.dp, vertical = 3.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            StatusDot(
-                status = status,
-                hasCachedBalance = hasCachedBalance,
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelSmall,
-                maxLines = 1,
-            )
-        }
-    }
-}
-
-private val Provider.parserLabelForCard: String
-    get() = when {
-        balanceEndpointHint.equals("Sub2API", ignoreCase = true) -> "Sub2API"
-        balanceEndpointHint.equals("NewAPI", ignoreCase = true) -> "NewAPI"
-        balanceEndpointHint.equals("Account Summary", ignoreCase = true) -> "Account Summary"
-        balanceEndpointHint.equals("DeepSeek", ignoreCase = true) -> "DeepSeek"
-        else -> "NewAPI"
-    }
-
-private val Provider.usesApiKey: Boolean
-    get() = parserLabelForCard.usesApiKeyParser
-
-private val String.usesApiKeyParser: Boolean
-    get() = equals("Account Summary", ignoreCase = true) || equals("DeepSeek", ignoreCase = true)
-
-@Composable
-private fun StatusDot(
-    status: BalanceStatus,
-    hasCachedBalance: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    val stale = hasCachedBalance && status != BalanceStatus.Ready
-    val color = when (status) {
-        BalanceStatus.Ready -> Color(0xFF1B7F4D)
-        BalanceStatus.NeedsLogin -> if (stale) Color(0xFFC28A2C).copy(alpha = 0.62f) else Color(0xFFB26A00)
-        BalanceStatus.Forbidden,
-        BalanceStatus.NotFound,
-        BalanceStatus.Timeout,
-        BalanceStatus.NetworkError,
-        BalanceStatus.ParserMismatch,
-        -> if (stale) MaterialTheme.colorScheme.outline.copy(alpha = 0.78f) else Color(0xFFBA1A1A)
-        BalanceStatus.Failed -> if (stale) MaterialTheme.colorScheme.outline.copy(alpha = 0.78f) else Color(0xFFBA1A1A)
-        BalanceStatus.NotConnected -> MaterialTheme.colorScheme.outline
-    }
-    Box(
-        modifier = modifier
-            .clip(CircleShape)
-            .background(color)
-            .size(if (stale) 5.dp else 6.dp),
-    )
 }

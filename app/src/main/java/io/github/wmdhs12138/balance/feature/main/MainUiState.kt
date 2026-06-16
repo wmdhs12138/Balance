@@ -5,6 +5,7 @@ import io.github.wmdhs12138.balance.core.model.AppLanguage
 import io.github.wmdhs12138.balance.core.model.ThemeMode
 import io.github.wmdhs12138.balance.R
 
+/** MainUiState 数据结构。 */
 data class MainUiState(
     val providers: List<Provider> = emptyList(),
     val loading: Boolean = true,
@@ -17,14 +18,18 @@ data class MainUiState(
     val message: UiMessage? = null,
 )
 
+/** UiMessage 数据结构。 */
 data class UiMessage(
     val resId: Int,
     val args: List<Any> = emptyList(),
 )
 
+/** 处理uiMessage 方法。 */
 private fun uiMessage(resId: Int, vararg args: Any): UiMessage = UiMessage(resId, args.toList())
 
+/** MainMessages 单例对象。 */
 object MainMessages {
+    /** 处理refreshComplete 方法。 */
     fun refreshComplete(ready: Int, needsLogin: Int, failed: Int) = uiMessage(
         R.string.message_refresh_complete,
         ready,

@@ -95,9 +95,18 @@
     <string name="clear_local_data_title">清除本地数据</string>
     <string name="clear_local_data_message">删除此设备上的所有供应商、加密登录数据、API Key、Cookie 和 WebView 缓存？</string>
     <string name="local_data_description">从此设备移除供应商和本地保存的登录数据。</string>
-    <string name="parser_account_summary">账户摘要</string>
     <string name="parser_api_key">API Key</string>
     <string name="parser_recommended">推荐</string>
+
+    <string name="field_balance_unit">余额单位</string>
+    <string name="balance_unit_auto">自动</string>
+    <string name="balance_unit_cny">¥ 人民币</string>
+    <string name="balance_unit_usd">$ 美元</string>
+    <string name="balance_unit_points">积分</string>
+    <string name="balance_unit_credits">Credits</string>
+    <string name="balance_unit_quota">额度</string>
+    <string name="balance_unit_tokens">Tokens</string>
+    <string name="balance_unit_unknown">无单位</string>
 
     <string name="content_description_encrypted_login_data">加密登录数据</string>
 </resources>

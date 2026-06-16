@@ -11,7 +11,9 @@ import java.net.URL
 import java.net.UnknownHostException
 import javax.net.ssl.SSLException
 
+/** BalanceHttpClient 接口。 */
 interface BalanceHttpClient {
+    /** 处理get 方法。 */
     suspend fun get(
         url: String,
         headers: Map<String, String> = emptyMap(),
@@ -21,7 +23,9 @@ interface BalanceHttpClient {
     ): HttpResponse
 }
 
+/** HttpBalanceClient 类。 */
 class HttpBalanceClient : BalanceHttpClient {
+    /** 处理get 方法。 */
     override suspend fun get(
         url: String,
         headers: Map<String, String>,
@@ -59,6 +63,7 @@ class HttpBalanceClient : BalanceHttpClient {
         }
     }
 
+    /** 处理readLimitedText 方法。 */
     private fun java.io.InputStream.readLimitedText(maxBytes: Int): String {
         val buffer = ByteArray(maxBytes + 1)
         var total = 0
@@ -70,6 +75,7 @@ class HttpBalanceClient : BalanceHttpClient {
         return buffer.decodeToString(endIndex = minOf(total, maxBytes))
     }
 
+    /** 转换为BalanceFetchException结果 方法。 */
     private fun Throwable.toBalanceFetchException(url: String): BalanceFetchException {
         val reason = when (this) {
             is SocketTimeoutException -> BalanceFetchFailureReason.Timeout
@@ -84,10 +90,12 @@ class HttpBalanceClient : BalanceHttpClient {
     }
 
     private companion object {
+        /** 处理MAX_BODY_BYTES 常量。 */
         const val MAX_BODY_BYTES = 256 * 1024
     }
 }
 
+/** HttpResponse 数据结构。 */
 data class HttpResponse(
     val statusCode: Int,
     val contentType: String,

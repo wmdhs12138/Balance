@@ -95,9 +95,18 @@
     <string name="clear_local_data_title">Очистить локальные данные</string>
     <string name="clear_local_data_message">Удалить всех провайдеров, зашифрованные данные входа, API Key, cookies и кэш WebView на этом устройстве?</string>
     <string name="local_data_description">Удаляет провайдеров и локально сохраненные данные входа с этого устройства.</string>
-    <string name="parser_account_summary">Сводка аккаунта</string>
     <string name="parser_api_key">API Key</string>
     <string name="parser_recommended">Рекомендуется</string>
+
+    <string name="field_balance_unit">Balance unit</string>
+    <string name="balance_unit_auto">Auto</string>
+    <string name="balance_unit_cny">¥ CNY</string>
+    <string name="balance_unit_usd">$ USD</string>
+    <string name="balance_unit_points">Points</string>
+    <string name="balance_unit_credits">Credits</string>
+    <string name="balance_unit_quota">Quota</string>
+    <string name="balance_unit_tokens">Tokens</string>
+    <string name="balance_unit_unknown">No unit</string>
 
     <string name="content_description_encrypted_login_data">Зашифрованные данные входа</string>
 </resources>

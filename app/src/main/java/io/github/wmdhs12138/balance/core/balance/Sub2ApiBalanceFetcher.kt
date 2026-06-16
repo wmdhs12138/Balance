@@ -1,12 +1,14 @@
 package io.github.wmdhs12138.balance.core.balance
 
 import io.github.wmdhs12138.balance.core.database.ProviderEntity
+import io.github.wmdhs12138.balance.core.model.BalanceUnit
 import io.github.wmdhs12138.balance.core.net.UrlNormalizer
-import java.util.Locale
 
+/** Sub2ApiBalanceFetcher 类。 */
 class Sub2ApiBalanceFetcher(
     private val httpClient: BalanceHttpClient,
 ) : BalanceFetcher {
+    /** 获取余额数据 方法。 */
     override suspend fun fetch(provider: ProviderEntity, encryptedLoginPayload: String?): BalanceFetchResult {
         val payload = parseLoginPayload(encryptedLoginPayload) as? LoginPayload.WebSession
             ?: throw BalanceFetchException("Login required", BalanceFetchFailureReason.NeedsLogin)
@@ -20,7 +22,7 @@ class Sub2ApiBalanceFetcher(
         AUTH_ENDPOINTS.forEach { path ->
             val response = httpClient.get(
                 url = UrlNormalizer.endpoint(provider.baseUrl, path),
-                headers = payload.headers(provider, token),
+                headers = BalanceHeaders.webSession(provider, payload, token = token),
                 connectTimeoutMillis = 20_000,
                 readTimeoutMillis = 45_000,
             )
@@ -42,24 +44,32 @@ class Sub2ApiBalanceFetcher(
             }
             runCatching {
                 val data = BalanceJsonExtractor.unwrapData(response.body)
-                val balance = BalanceJsonExtractor.findNumber(
-                    data,
-                    listOf(
-                        "balance",
-                        "wallet_balance",
-                        "remaining_balance",
-                        "available_balance",
-                        "credit",
-                        "credits",
-                        "amount",
-                        "money",
-                        "quota",
-                    ),
-                ) ?: throw BalanceFetchException(
-                    message = "Sub2API balance field not found: fields=${BalanceJsonExtractor.fieldNames(data)}",
-                    reason = BalanceFetchFailureReason.InvalidResponse,
+                val balanceKeys = listOf(
+                    "points",
+                    "point",
+                    "score",
+                    "credits",
+                    "credit",
+                    "tokens",
+                    "token",
+                    "quota",
+                    "balance",
+                    "wallet_balance",
+                    "remaining_balance",
+                    "available_balance",
+                    "amount",
+                    "money",
                 )
-                BalanceFetchResult(String.format(Locale.US, "$ %.2f", balance))
+                val balance = BalanceJsonExtractor.findNumber(data, balanceKeys)
+                    ?: throw BalanceFetchException(
+                        message = "Sub2API balance field not found: fields=${BalanceJsonExtractor.fieldNames(data)}",
+                        reason = BalanceFetchFailureReason.InvalidResponse,
+                    )
+                val unit = BalanceJsonExtractor.findMatchedNumberKey(data, balanceKeys)
+                    ?.let(BalanceUnit::inferredFromKey)
+                    ?.takeUnless { it == BalanceUnit.Unknown }
+                    ?: BalanceUnit.Usd
+                BalanceFetchResult(BalanceFormatters.number(balance), unit)
             }.onSuccess {
                 return it
             }.onFailure { throwable ->
@@ -73,24 +83,7 @@ class Sub2ApiBalanceFetcher(
         throw lastError ?: BalanceFetchException("Sub2API balance field not found", BalanceFetchFailureReason.InvalidResponse)
     }
 
-    private fun ProviderEntity.origin(): String = UrlNormalizer.origin(baseUrl) ?: baseUrl
-
-    private fun LoginPayload.WebSession.headers(provider: ProviderEntity, token: String): Map<String, String> {
-        return buildMap {
-            put("Accept", "application/json")
-            put("Accept-Language", "zh-CN,zh;q=0.9,en;q=0.8")
-            put("Cache-Control", "no-store")
-            put("Content-Type", "application/json")
-            if (cookies.isNotBlank()) {
-                put("Cookie", cookies)
-            }
-            put("User-Agent", userAgent.ifBlank { BalanceHttpDefaults.USER_AGENT })
-            put("Referer", url.ifBlank { provider.baseUrl })
-            put("Origin", provider.origin())
-            put("Authorization", bearerToken(token))
-        }
-    }
-
+    /** 处理findAuthToken 方法。 */
     private fun LoginPayload.WebSession.findAuthToken(): String? {
         return LoginDataInspector.findAuthToken(
             storage,
@@ -98,6 +91,7 @@ class Sub2ApiBalanceFetcher(
         )
     }
 
+    /** 处理diagnosticSummary 方法。 */
     private fun LoginPayload.WebSession.diagnosticSummary(): String {
         return "cookie=${cookies.isNotBlank()}, authToken=${findAuthToken() != null}, storageKeys=${LoginDataInspector.storageKeySummary(storage)}"
     }

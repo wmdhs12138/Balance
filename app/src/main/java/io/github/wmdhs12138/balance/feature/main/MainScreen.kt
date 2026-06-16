@@ -45,24 +45,26 @@ import androidx.compose.ui.unit.dp
 import io.github.wmdhs12138.balance.R
 import io.github.wmdhs12138.balance.core.model.AppLanguage
 import io.github.wmdhs12138.balance.core.model.BalanceStatus
+import io.github.wmdhs12138.balance.core.model.BalanceUnit
 import io.github.wmdhs12138.balance.core.model.Provider
 import io.github.wmdhs12138.balance.core.model.ThemeMode
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+/** 渲染主界面 方法。 */
 fun MainScreen(
     uiState: MainUiState,
     onRefresh: () -> Unit,
     onRefreshProvider: (Long) -> Unit,
-    onAddProvider: (String, String, String?) -> Unit,
+    onAddProvider: (String, String, String?, BalanceUnit) -> Unit,
     onThemeModeChanged: (ThemeMode) -> Unit,
     onDynamicColorChanged: (Boolean) -> Unit,
     onSeedColorChanged: (Long) -> Unit,
     onLanguageChanged: (AppLanguage) -> Unit,
     onLoginProvider: (Provider) -> Unit,
     onSaveApiKey: (Long, String) -> Unit,
-    onUpdateProviderSettings: (Long, String, String?) -> Unit,
+    onUpdateProviderSettings: (Long, String, String?, BalanceUnit) -> Unit,
     onDeleteProvider: (Provider) -> Unit,
     onClearLocalData: () -> Unit,
     onResolveProviderTitle: (String, (String) -> Unit) -> Unit,
@@ -161,9 +163,9 @@ fun MainScreen(
             strings = strings,
             onDismiss = { showAddSheet = false },
             onResolveTitle = onResolveProviderTitle,
-            onSubmit = { name, url, parserLabel ->
+            onSubmit = { name, url, parserLabel, balanceUnitOverride ->
                 scope.launch {
-                    onAddProvider(name, url, parserLabel)
+                    onAddProvider(name, url, parserLabel, balanceUnitOverride)
                     showAddSheet = false
                 }
             },
@@ -200,8 +202,8 @@ fun MainScreen(
             provider = provider,
             strings = strings,
             onDismiss = { parserProvider = null },
-            onSubmit = { name, parserLabel ->
-                onUpdateProviderSettings(provider.id, name, parserLabel)
+            onSubmit = { name, parserLabel, balanceUnitOverride ->
+                onUpdateProviderSettings(provider.id, name, parserLabel, balanceUnitOverride)
                 parserProvider = null
             },
             onDelete = {
@@ -213,6 +215,7 @@ fun MainScreen(
 }
 
 @Composable
+/** 处理SummaryHeader 方法。 */
 private fun SummaryHeader(
     uiState: MainUiState,
     strings: LocalizedStrings,

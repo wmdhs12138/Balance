@@ -8,6 +8,7 @@ import io.github.wmdhs12138.balance.core.crypto.LoginDataCipher
 import io.github.wmdhs12138.balance.core.database.ProviderDao
 import io.github.wmdhs12138.balance.core.database.ProviderEntity
 import io.github.wmdhs12138.balance.core.model.BalanceStatus
+import io.github.wmdhs12138.balance.core.model.BalanceUnit
 import io.github.wmdhs12138.balance.core.model.Provider
 import io.github.wmdhs12138.balance.core.net.UrlNormalizer
 import kotlinx.coroutines.async
@@ -18,6 +19,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 
+/** ProviderRepository 类。 */
 class ProviderRepository(
     private val providerDao: ProviderDao,
     private val loginDataCipher: LoginDataCipher,
@@ -26,11 +28,8 @@ class ProviderRepository(
     val providers: Flow<List<Provider>> = providerDao.observeProviders()
         .map { providers -> providers.map(ProviderEntity::toModel) }
 
-    suspend fun normalizeLegacyData() {
-        providerDao.normalizeNewApiParserLabel()
-    }
-
-    suspend fun addCustomProvider(name: String, baseUrl: String, parserLabel: String?): AddProviderResult {
+    /** 添加自定义服务商 方法。 */
+    suspend fun addCustomProvider(name: String, baseUrl: String, parserLabel: String?, balanceUnitOverride: BalanceUnit): AddProviderResult {
         val normalizedUrl = UrlNormalizer.normalize(baseUrl)
             ?: return AddProviderResult.InvalidUrl
         if (providerDao.getProviderByBaseUrl(normalizedUrl.origin) != null) {
@@ -42,16 +41,19 @@ class ProviderRepository(
                 baseUrl = normalizedUrl.origin,
                 loginUrl = normalizedUrl.displayUrl,
                 balanceEndpointHint = parserLabel?.takeIf { it.isNotBlank() },
+                balanceUnitOverride = balanceUnitOverride,
                 status = BalanceStatus.NotConnected,
             ),
         )
         return AddProviderResult.Added
     }
 
+    /** 保存加密登录数据 方法。 */
     suspend fun storeEncryptedLogin(provider: ProviderEntity, loginPayload: String) {
         providerDao.update(provider.copy(encryptedLoginPayload = loginDataCipher.encrypt(loginPayload)))
     }
 
+    /** 保存加密登录数据 方法。 */
     suspend fun storeEncryptedLogin(providerId: Long, loginPayload: String) {
         providerDao.updateEncryptedLogin(
             id = providerId,
@@ -61,6 +63,7 @@ class ProviderRepository(
         )
     }
 
+    /** 保存 API Key 方法。 */
     suspend fun storeApiKey(providerId: Long, apiKey: String) {
         providerDao.updateEncryptedLogin(
             id = providerId,
@@ -70,6 +73,7 @@ class ProviderRepository(
         )
     }
 
+    /** 更新解析器标签 方法。 */
     suspend fun updateParserLabel(providerId: Long, parserLabel: String?) {
         providerDao.updateParserLabel(
             id = providerId,
@@ -78,28 +82,34 @@ class ProviderRepository(
         )
     }
 
-    suspend fun updateProviderSettings(providerId: Long, name: String, parserLabel: String?) {
+    /** 更新服务商设置 方法。 */
+    suspend fun updateProviderSettings(providerId: Long, name: String, parserLabel: String?, balanceUnitOverride: BalanceUnit) {
         providerDao.updateProviderSettings(
             id = providerId,
             name = name.trim(),
             parserLabel = parserLabel?.takeIf { it.isNotBlank() },
+            balanceUnitOverride = balanceUnitOverride,
             lastAttemptAtMillis = System.currentTimeMillis(),
         )
     }
 
+    /** 删除服务商 方法。 */
     suspend fun deleteProvider(providerId: Long) {
         providerDao.deleteProvider(providerId)
     }
 
+    /** 删除全部服务商 方法。 */
     suspend fun deleteAllProviders() {
         providerDao.deleteAllProviders()
     }
 
+    /** 刷新单个服务商余额 方法。 */
     suspend fun refreshProvider(providerId: Long): Boolean {
         val provider = providerDao.getProvider(providerId) ?: return false
         return refreshProvider(provider).isSuccess
     }
 
+    /** 刷新全部服务商余额 方法。 */
     suspend fun refreshBalances(): RefreshSummary {
         val providers = providerDao.getProviders()
         val refreshResults = coroutineScope {
@@ -119,6 +129,7 @@ class ProviderRepository(
         )
     }
 
+    /** 处理decryptLoginPayload 方法。 */
     private suspend fun decryptLoginPayload(provider: ProviderEntity): String? {
         val encrypted = provider.encryptedLoginPayload ?: return null
         return runCatching { loginDataCipher.decrypt(encrypted) }
@@ -131,6 +142,7 @@ class ProviderRepository(
             }
     }
 
+    /** 刷新单个服务商余额 方法。 */
     private suspend fun refreshProvider(provider: ProviderEntity): RefreshResult {
         val timestamp = System.currentTimeMillis()
         return runCatching {
@@ -141,6 +153,7 @@ class ProviderRepository(
                 id = provider.id,
                 status = BalanceStatus.Ready,
                 balanceText = result.balanceText,
+                balanceUnit = result.balanceUnit,
                 timestamp = timestamp,
             )
         }.onFailure { throwable ->
@@ -159,6 +172,7 @@ class ProviderRepository(
         )
     }
 
+    /** 处理balanceStatus 方法。 */
     private fun Throwable.balanceStatus(): BalanceStatus {
         return when (if (this is BalanceFetchException) reason else BalanceFetchFailureReason.Unknown) {
             BalanceFetchFailureReason.NeedsLogin -> BalanceStatus.NeedsLogin
@@ -175,16 +189,19 @@ class ProviderRepository(
     }
 
     private companion object {
+        /** 处理MAX_CONCURRENT_REFRESHES 常量。 */
         const val MAX_CONCURRENT_REFRESHES = 3
     }
 }
 
+/** AddProviderResult 枚举。 */
 enum class AddProviderResult {
     Added,
     AlreadyExists,
     InvalidUrl,
 }
 
+/** RefreshSummary 数据结构。 */
 data class RefreshSummary(
     val ready: Int,
     val needsLogin: Int,

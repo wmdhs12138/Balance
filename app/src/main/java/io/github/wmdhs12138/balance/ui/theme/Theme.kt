@@ -21,6 +21,7 @@ import androidx.core.view.WindowCompat
 import io.github.wmdhs12138.balance.core.model.ThemeMode
 
 @Composable
+/** 应用主题样式 方法。 */
 fun BalanceTheme(
     themeMode: ThemeMode,
     seedColor: Long,
@@ -59,16 +60,10 @@ fun BalanceTheme(
     )
 }
 
-private fun Long.normalizedSeedColor(): Long {
-    val legacyPackedValues = mapOf(
-        EmeraldSeed.value.toLong() to 0xFF006C4F,
-        BlueSeed.value.toLong() to 0xFF2457A6,
-        RoseSeed.value.toLong() to 0xFF9B2D55,
-        AmberSeed.value.toLong() to 0xFF7A5800,
-    )
-    return legacyPackedValues[this] ?: (this and 0xFFFFFFFFL)
-}
+/** 将主题种子色限制为 ARGB 无符号范围。 */
+private fun Long.normalizedSeedColor(): Long = this and 0xFFFFFFFFL
 
+/** 处理lightScheme 方法。 */
 private fun lightScheme(seed: Color): ColorScheme {
     val primary = seed
     val secondary = seed.withSaturation(0.42f).withValue(0.46f)
@@ -101,6 +96,7 @@ private fun lightScheme(seed: Color): ColorScheme {
     )
 }
 
+/** 处理darkScheme 方法。 */
 private fun darkScheme(seed: Color): ColorScheme {
     val primary = seed.withValue(0.82f).withSaturation(0.62f)
     val secondary = seed.withSaturation(0.34f).withValue(0.76f)
@@ -133,6 +129,7 @@ private fun darkScheme(seed: Color): ColorScheme {
     )
 }
 
+/** 处理blend 方法。 */
 private fun Color.blend(other: Color, otherWeight: Float): Color {
     val clamped = otherWeight.coerceIn(0f, 1f)
     val selfWeight = 1f - clamped
@@ -144,6 +141,7 @@ private fun Color.blend(other: Color, otherWeight: Float): Color {
     )
 }
 
+/** 处理shiftHue 方法。 */
 private fun Color.shiftHue(degrees: Float): Color {
     val hsv = FloatArray(3)
     AndroidColor.colorToHSV(toArgb(), hsv)
@@ -151,6 +149,7 @@ private fun Color.shiftHue(degrees: Float): Color {
     return Color(AndroidColor.HSVToColor((alpha * 255).toInt(), hsv))
 }
 
+/** 处理withSaturation 方法。 */
 private fun Color.withSaturation(saturation: Float): Color {
     val hsv = FloatArray(3)
     AndroidColor.colorToHSV(toArgb(), hsv)
@@ -158,6 +157,7 @@ private fun Color.withSaturation(saturation: Float): Color {
     return Color(AndroidColor.HSVToColor((alpha * 255).toInt(), hsv))
 }
 
+/** 处理withValue 方法。 */
 private fun Color.withValue(value: Float): Color {
     val hsv = FloatArray(3)
     AndroidColor.colorToHSV(toArgb(), hsv)
@@ -165,6 +165,7 @@ private fun Color.withValue(value: Float): Color {
     return Color(AndroidColor.HSVToColor((alpha * 255).toInt(), hsv))
 }
 
+/** 处理readableTextColor 方法。 */
 private fun Color.readableTextColor(): Color = if (luminance() > 0.45f) {
     Color(0xFF101412)
 } else {

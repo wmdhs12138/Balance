@@ -13,8 +13,8 @@ android {
         applicationId = "io.github.wmdhs12138.balance"
         minSdk = 26
         targetSdk = 35
-        versionCode = 12
-        versionName = "0.2.1"
+        versionCode = 16
+        versionName = "0.3.1"
     }
 
     signingConfigs {

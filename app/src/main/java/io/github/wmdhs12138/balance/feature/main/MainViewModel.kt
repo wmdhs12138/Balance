@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import io.github.wmdhs12138.balance.R
 import io.github.wmdhs12138.balance.core.model.AppLanguage
+import io.github.wmdhs12138.balance.core.model.BalanceUnit
 import io.github.wmdhs12138.balance.core.model.ThemeMode
 import io.github.wmdhs12138.balance.core.net.UrlNormalizer
 import io.github.wmdhs12138.balance.core.preferences.SettingsRepository
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/** MainViewModel 类。 */
 class MainViewModel(
     private val providerRepository: ProviderRepository,
     private val settingsRepository: SettingsRepository,
@@ -42,12 +44,7 @@ class MainViewModel(
         initialValue = MainUiState(),
     )
 
-    init {
-        viewModelScope.launch {
-            providerRepository.normalizeLegacyData()
-        }
-    }
-
+    /** 刷新全部服务商余额 方法。 */
     fun refreshBalances() {
         viewModelScope.launch {
             if (transientState.value.refreshingAll) return@launch
@@ -63,6 +60,7 @@ class MainViewModel(
         }
     }
 
+    /** 刷新单个服务商余额 方法。 */
     fun refreshProvider(providerId: Long) {
         viewModelScope.launch {
             transientState.update {
@@ -87,7 +85,8 @@ class MainViewModel(
         }
     }
 
-    fun addCustomProvider(name: String, baseUrl: String, parserLabel: String?) {
+    /** 添加自定义服务商 方法。 */
+    fun addCustomProvider(name: String, baseUrl: String, parserLabel: String?, balanceUnitOverride: BalanceUnit) {
         viewModelScope.launch {
             val normalizedUrl = UrlNormalizer.webUrl(baseUrl)
             if (normalizedUrl == null) {
@@ -97,7 +96,7 @@ class MainViewModel(
             val normalizedName = name.ifBlank {
                 settingsRepository.localizedString(R.string.default_provider_name_custom)
             }
-            val message = when (providerRepository.addCustomProvider(normalizedName, normalizedUrl, parserLabel)) {
+            val message = when (providerRepository.addCustomProvider(normalizedName, normalizedUrl, parserLabel, balanceUnitOverride)) {
                 AddProviderResult.Added -> MainMessages.ProviderAdded
                 AddProviderResult.AlreadyExists -> MainMessages.ProviderAlreadyExists
                 AddProviderResult.InvalidUrl -> MainMessages.ProviderUrlInvalid
@@ -106,6 +105,7 @@ class MainViewModel(
         }
     }
 
+    /** 处理saveApiKey 方法。 */
     fun saveApiKey(providerId: Long, apiKey: String) {
         viewModelScope.launch {
             providerRepository.storeApiKey(providerId, apiKey)
@@ -113,6 +113,7 @@ class MainViewModel(
         }
     }
 
+    /** 更新解析器标签 方法。 */
     fun updateParserLabel(providerId: Long, parserLabel: String?) {
         viewModelScope.launch {
             providerRepository.updateParserLabel(providerId, parserLabel)
@@ -120,16 +121,18 @@ class MainViewModel(
         }
     }
 
-    fun updateProviderSettings(providerId: Long, name: String, parserLabel: String?) {
+    /** 更新服务商设置 方法。 */
+    fun updateProviderSettings(providerId: Long, name: String, parserLabel: String?, balanceUnitOverride: BalanceUnit) {
         viewModelScope.launch {
             val normalizedName = name.ifBlank {
                 settingsRepository.localizedString(R.string.default_provider_name)
             }
-            providerRepository.updateProviderSettings(providerId, normalizedName, parserLabel)
+            providerRepository.updateProviderSettings(providerId, normalizedName, parserLabel, balanceUnitOverride)
             transientState.update { it.copy(message = MainMessages.ProviderUpdated) }
         }
     }
 
+    /** 删除服务商 方法。 */
     fun deleteProvider(providerId: Long, webDataCleared: Boolean = true) {
         viewModelScope.launch {
             providerRepository.deleteProvider(providerId)
@@ -145,6 +148,7 @@ class MainViewModel(
         }
     }
 
+    /** 删除全部服务商 方法。 */
     fun deleteAllProviders(webDataCleared: Boolean = true) {
         viewModelScope.launch {
             providerRepository.deleteAllProviders()
@@ -160,27 +164,33 @@ class MainViewModel(
         }
     }
 
+    /** 设置主题模式 方法。 */
     fun setThemeMode(mode: ThemeMode) {
         viewModelScope.launch { settingsRepository.setThemeMode(mode) }
     }
 
+    /** 设置动态取色 方法。 */
     fun setDynamicColor(enabled: Boolean) {
         viewModelScope.launch { settingsRepository.setDynamicColor(enabled) }
     }
 
+    /** 设置主题种子色 方法。 */
     fun setSeedColor(color: Long) {
         viewModelScope.launch { settingsRepository.setSeedColor(color) }
     }
 
+    /** 设置应用语言 方法。 */
     fun setLanguage(language: AppLanguage) {
         viewModelScope.launch { settingsRepository.setLanguage(language) }
     }
 
+    /** 关闭提示消息 方法。 */
     fun dismissMessage() {
         transientState.update { it.copy(message = null) }
     }
 }
 
+/** MainViewModelFactory 类。 */
 class MainViewModelFactory(
     private val providerRepository: ProviderRepository,
     private val settingsRepository: SettingsRepository,

@@ -3,22 +3,27 @@ package io.github.wmdhs12138.balance.core.balance
 import org.json.JSONArray
 import org.json.JSONObject
 
+/** LoginDataInspector 单例对象。 */
 object LoginDataInspector {
     private val tokenKeys = listOf("token", "access_token", "accessToken", "user_token", "auth_token", "jwt", "userToken", "user_token")
     private val userIdKeys = listOf("uid", "user_id", "userId", "id")
 
+    /** 判断是否有LoginData信息 方法。 */
     fun hasLoginData(cookies: String, storage: String): Boolean {
         return cookies.isNotBlank() || findAuthToken(storage) != null
     }
 
+    /** 处理findAuthToken 方法。 */
     fun findAuthToken(storage: String, keys: List<String> = tokenKeys): String? {
         return findString(storage, keys, fuzzyName = "token")
     }
 
+    /** 处理findUserId 方法。 */
     fun findUserId(storage: String): String? {
         return findString(storage, userIdKeys, fuzzyName = null)
     }
 
+    /** 处理storageKeySummary 方法。 */
     fun storageKeySummary(storage: String): String {
         val root = runCatching { JSONObject(storage) }.getOrNull() ?: return ""
         val localStorage = root.optJSONObject("localStorage")
@@ -29,6 +34,7 @@ object LoginDataInspector {
         ).flatten().joinToString(limit = 8)
     }
 
+    /** 查找文本字段 方法。 */
     private fun findString(storage: String, keys: List<String>, fuzzyName: String?): String? {
         val root = runCatching { JSONObject(storage) }.getOrNull() ?: return null
         val containers = listOfNotNull(
@@ -42,6 +48,7 @@ object LoginDataInspector {
         return null
     }
 
+    /** 处理findStringInValue 方法。 */
     private fun findStringInValue(
         value: Any?,
         keys: Set<String>,
@@ -57,6 +64,7 @@ object LoginDataInspector {
         }
     }
 
+    /** 处理findStringInObject 方法。 */
     private fun findStringInObject(
         json: JSONObject,
         keys: Set<String>,
@@ -75,6 +83,7 @@ object LoginDataInspector {
         return null
     }
 
+    /** 处理findStringInArray 方法。 */
     private fun findStringInArray(
         array: JSONArray,
         keys: Set<String>,
@@ -87,6 +96,7 @@ object LoginDataInspector {
         return null
     }
 
+    /** 处理asJsonValue 方法。 */
     private fun String.asJsonValue(): Any? {
         val trimmed = trim()
         return when {
@@ -96,5 +106,6 @@ object LoginDataInspector {
         }
     }
 
+    /** 处理MAX_DEPTH 常量。 */
     private const val MAX_DEPTH = 6
 }

@@ -95,9 +95,18 @@
     <string name="clear_local_data_title">ローカルデータを消去</string>
     <string name="clear_local_data_message">この端末のすべてのプロバイダー、暗号化されたログインデータ、API Key、Cookie、WebView キャッシュを削除しますか？</string>
     <string name="local_data_description">この端末からプロバイダーとローカル保存されたログインデータを削除します。</string>
-    <string name="parser_account_summary">アカウント概要</string>
     <string name="parser_api_key">API Key</string>
     <string name="parser_recommended">推奨</string>
+
+    <string name="field_balance_unit">Balance unit</string>
+    <string name="balance_unit_auto">Auto</string>
+    <string name="balance_unit_cny">¥ CNY</string>
+    <string name="balance_unit_usd">$ USD</string>
+    <string name="balance_unit_points">Points</string>
+    <string name="balance_unit_credits">Credits</string>
+    <string name="balance_unit_quota">Quota</string>
+    <string name="balance_unit_tokens">Tokens</string>
+    <string name="balance_unit_unknown">No unit</string>
 
     <string name="content_description_encrypted_login_data">暗号化されたログインデータ</string>
 </resources>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#EEF5F2</color>
+    <!-- MD3 tonal container background for the adaptive launcher icon. -->
+    <color name="ic_launcher_background">#DCE2FF</color>
 </resources>

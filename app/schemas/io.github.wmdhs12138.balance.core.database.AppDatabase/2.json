@@ -1,0 +1,97 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "97968350a276939f1ce0ee978b3fa99f",
+    "entities": [
+      {
+        "tableName": "providers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `baseUrl` TEXT NOT NULL, `loginUrl` TEXT NOT NULL, `balanceEndpointHint` TEXT, `status` TEXT NOT NULL, `balanceText` TEXT, `balanceUnit` TEXT NOT NULL, `balanceUnitOverride` TEXT NOT NULL, `lastErrorText` TEXT, `encryptedLoginPayload` TEXT, `lastSuccessAtMillis` INTEGER, `lastAttemptAtMillis` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "baseUrl",
+            "columnName": "baseUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "loginUrl",
+            "columnName": "loginUrl",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "balanceEndpointHint",
+            "columnName": "balanceEndpointHint",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "balanceText",
+            "columnName": "balanceText",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "balanceUnit",
+            "columnName": "balanceUnit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "balanceUnitOverride",
+            "columnName": "balanceUnitOverride",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastErrorText",
+            "columnName": "lastErrorText",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "encryptedLoginPayload",
+            "columnName": "encryptedLoginPayload",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "lastSuccessAtMillis",
+            "columnName": "lastSuccessAtMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "lastAttemptAtMillis",
+            "columnName": "lastAttemptAtMillis",
+            "affinity": "INTEGER"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '97968350a276939f1ce0ee978b3fa99f')"
+    ]
+  }
+}

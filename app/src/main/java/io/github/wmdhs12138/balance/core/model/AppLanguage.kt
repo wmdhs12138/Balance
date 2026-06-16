@@ -1,5 +1,6 @@
 package io.github.wmdhs12138.balance.core.model
 
+/** AppLanguage 枚举。 */
 enum class AppLanguage(
     val preferenceValue: String,
     val languageTag: String?,
@@ -13,6 +14,7 @@ enum class AppLanguage(
     Japanese("ja", "ja");
 
     companion object {
+        /** 从Preference创建结果 方法。 */
         fun fromPreference(value: String?): AppLanguage {
             return entries.firstOrNull { it.preferenceValue == value } ?: System
         }

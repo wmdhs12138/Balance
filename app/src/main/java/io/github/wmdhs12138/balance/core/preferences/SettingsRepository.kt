@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.map
 
 private val Context.dataStore by preferencesDataStore(name = "settings")
 
+/** SettingsRepository 类。 */
 class SettingsRepository(private val context: Context) {
     val preferences: Flow<UserPreferences> = context.dataStore.data.map { prefs ->
         UserPreferences(
@@ -25,22 +26,27 @@ class SettingsRepository(private val context: Context) {
         )
     }
 
+    /** 设置主题模式 方法。 */
     suspend fun setThemeMode(mode: ThemeMode) {
         context.dataStore.edit { it[THEME_MODE] = mode.name }
     }
 
+    /** 设置动态取色 方法。 */
     suspend fun setDynamicColor(enabled: Boolean) {
         context.dataStore.edit { it[DYNAMIC_COLOR] = enabled }
     }
 
+    /** 设置主题种子色 方法。 */
     suspend fun setSeedColor(color: Long) {
         context.dataStore.edit { it[SEED_COLOR] = color }
     }
 
+    /** 设置应用语言 方法。 */
     suspend fun setLanguage(language: AppLanguage) {
         context.dataStore.edit { it[LANGUAGE] = language.preferenceValue }
     }
 
+    /** 读取本地化字符串 方法。 */
     suspend fun localizedString(resId: Int, vararg args: Any): String {
         val language = preferences.first().language
         val localizedContext = context.localized(language)
@@ -48,6 +54,7 @@ class SettingsRepository(private val context: Context) {
     }
 
     private companion object {
+        /** 处理DEFAULT_SEED_COLOR 常量。 */
         const val DEFAULT_SEED_COLOR = 0xFF006C4FL
         val THEME_MODE = stringPreferencesKey("theme_mode")
         val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")

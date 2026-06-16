@@ -64,11 +64,13 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.net.URI
 
+/** WebLoginActivity 类。 */
 class WebLoginActivity : ComponentActivity() {
     private val providerId: Long by lazy { intent.getLongExtra(EXTRA_PROVIDER_ID, 0L) }
     private val providerName: String by lazy { intent.getStringExtra(EXTRA_PROVIDER_NAME).orEmpty() }
     private val loginUrl: String by lazy { intent.getStringExtra(EXTRA_LOGIN_URL).orEmpty() }
 
+    /** 初始化界面与依赖 方法。 */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -105,12 +107,17 @@ class WebLoginActivity : ComponentActivity() {
     }
 
     companion object {
+        /** 处理EXTRA_PROVIDER_ID 常量。 */
         private const val EXTRA_PROVIDER_ID = "provider_id"
+        /** 处理EXTRA_PROVIDER_NAME 常量。 */
         private const val EXTRA_PROVIDER_NAME = "provider_name"
+        /** 处理EXTRA_LOGIN_URL 常量。 */
         private const val EXTRA_LOGIN_URL = "login_url"
 
+        /** 处理providerIdFromResult 方法。 */
         fun providerIdFromResult(data: Intent?): Long = data?.getLongExtra(EXTRA_PROVIDER_ID, 0L) ?: 0L
 
+        /** 处理createIntent 方法。 */
         fun createIntent(
             context: Context,
             providerId: Long,
@@ -126,6 +133,7 @@ class WebLoginActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
+/** 处理WebLoginScreen 方法。 */
 private fun WebLoginScreen(
     providerName: String,
     loginUrl: String,
@@ -225,15 +233,18 @@ private fun WebLoginScreen(
                 factory = {
                     webView.apply {
                         webChromeClient = object : WebChromeClient() {
+                            /** 处理ProgressChanged事件 方法。 */
                             override fun onProgressChanged(view: WebView, newProgress: Int) {
                                 progress = newProgress
                             }
 
+                            /** 处理ReceivedTitle事件 方法。 */
                             override fun onReceivedTitle(view: WebView, pageTitle: String?) {
                                 title = pageTitle?.takeIf { it.isNotBlank() } ?: providerName
                             }
                         }
                         webViewClient = object : WebViewClient() {
+                            /** 处理PageStarted事件 方法。 */
                             override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                                 currentUrl = url.orEmpty()
                                 canGoBack = view.canGoBack()
@@ -241,11 +252,13 @@ private fun WebLoginScreen(
                                 loginDataState = LoginDataState.Unknown
                             }
 
+                            /** 处理shouldOverrideUrlLoading 方法。 */
                             override fun shouldOverrideUrlLoading(
                                 view: WebView,
                                 request: WebResourceRequest,
                             ): Boolean = false
 
+                            /** 处理PageFinished事件 方法。 */
                             override fun onPageFinished(view: WebView, url: String?) {
                                 currentUrl = url.orEmpty()
                                 canGoBack = view.canGoBack()
@@ -279,6 +292,7 @@ private enum class LoginDataState {
 }
 
 @Composable
+/** 转换为显示标签 方法。 */
 private fun LoginDataState.label(): String {
     return when (this) {
         LoginDataState.Unknown -> ""
@@ -287,6 +301,7 @@ private fun LoginDataState.label(): String {
     }
 }
 
+/** 处理captureLoginSnapshot 方法。 */
 private fun WebView.captureLoginSnapshot(
     currentUrl: String,
     onSnapshot: (String) -> Unit,
@@ -298,6 +313,7 @@ private fun WebView.captureLoginSnapshot(
     }
 }
 
+/** 处理inspectLoginData 方法。 */
 private fun WebView.inspectLoginData(
     currentUrl: String,
     onResult: (Boolean) -> Unit,
@@ -315,6 +331,7 @@ private fun WebView.inspectLoginData(
     }
 }
 
+/** 处理loginSnapshot 方法。 */
 private fun WebView.loginSnapshot(
     currentUrl: String,
     storageSnapshot: String,
@@ -342,15 +359,18 @@ private fun WebView.loginSnapshot(
         .toString()
 }
 
+/** 处理originUrl 方法。 */
 private fun String.originUrl(): String = runCatching {
     val uri = URI(this)
     "${uri.scheme}://${uri.host}"
 }.getOrDefault("")
 
+/** 转换为HostLabel结果 方法。 */
 private fun String.toHostLabel(): String = runCatching {
     URI(this).host?.takeIf { it.isNotBlank() } ?: this
 }.getOrDefault(this)
 
+/** 处理STORAGE_SNAPSHOT_SCRIPT 常量。 */
 private const val STORAGE_SNAPSHOT_SCRIPT = """
     JSON.stringify({
         localStorage: Object.keys(window.localStorage || {}).reduce(function(acc, key) {
