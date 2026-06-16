@@ -9,4 +9,5 @@ data class UserPreferences(
     val dynamicColor: Boolean = true,
     val seedColor: Long = 0xFF006C4FL,
     val language: AppLanguage = AppLanguage.System,
+    val pullRefreshHintShown: Boolean = false,
 )

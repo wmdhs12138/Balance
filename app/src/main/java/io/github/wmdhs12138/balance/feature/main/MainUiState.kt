@@ -15,6 +15,8 @@ data class MainUiState(
     val language: AppLanguage = AppLanguage.System,
     val refreshingAll: Boolean = false,
     val refreshingProviderIds: Set<Long> = emptySet(),
+    val sortingMode: Boolean = false,
+    val pullRefreshHintShown: Boolean = false,
     val message: UiMessage? = null,
 )
 
@@ -45,6 +47,7 @@ object MainMessages {
     val ApiKeySaved = uiMessage(R.string.message_api_key_saved)
     val ParserUpdated = uiMessage(R.string.message_parser_updated)
     val ProviderUpdated = uiMessage(R.string.message_provider_updated)
+    val ProviderOrderUpdated = uiMessage(R.string.message_provider_order_updated)
     val ProviderDeleted = uiMessage(R.string.message_provider_deleted)
     val ProviderDeletedWebDataMayRemain = uiMessage(R.string.message_provider_deleted_web_data_may_remain)
     val LocalDataCleared = uiMessage(R.string.message_local_data_cleared)

@@ -85,6 +85,9 @@
     <string name="provider_error_details">详情</string>
     <string name="provider_section_actions">操作</string>
     <string name="provider_section_information">信息</string>
+    <string name="provider_section_connection">连接</string>
+    <string name="provider_section_edit">编辑</string>
+    <string name="provider_section_status">状态</string>
     <string name="provider_last_attempt">上次尝试</string>
     <string name="provider_last_success">上次成功</string>
     <string name="add_provider_title">添加供应商</string>
@@ -109,4 +112,15 @@
     <string name="balance_unit_unknown">无单位</string>
 
     <string name="content_description_encrypted_login_data">加密登录数据</string>
+
+    <string name="message_provider_order_updated">供应商排序已更新</string>
+    <string name="action_sort">排序</string>
+    <string name="action_done">完成</string>
+    <string name="sort_providers_title">排序供应商</string>
+    <string name="sort_providers_hint">长按并拖动卡片调整顺序</string>
+
+    <string name="pull_refresh_hint">下拉刷新余额</string>
+    <string name="pull_refresh_pull">下拉刷新</string>
+    <string name="pull_refresh_release">松开刷新</string>
+    <string name="pull_refresh_refreshing">正在刷新…</string>
 </resources>

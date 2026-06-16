@@ -7,6 +7,7 @@ data class Provider(
     val baseUrl: String,
     val loginUrl: String,
     val balanceEndpointHint: String?,
+    val sortOrder: Int,
     val status: BalanceStatus,
     val balanceText: String?,
     val balanceUnit: BalanceUnit,

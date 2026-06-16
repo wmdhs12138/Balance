@@ -37,6 +37,7 @@ class MainViewModel(
             dynamicColor = preferences.dynamicColor,
             seedColor = preferences.seedColor,
             language = preferences.language,
+            pullRefreshHintShown = preferences.pullRefreshHintShown,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -47,6 +48,7 @@ class MainViewModel(
     /** 刷新全部服务商余额 方法。 */
     fun refreshBalances() {
         viewModelScope.launch {
+            settingsRepository.setPullRefreshHintShown(true)
             if (transientState.value.refreshingAll) return@launch
             transientState.update { it.copy(refreshingAll = true) }
             try {
@@ -161,6 +163,24 @@ class MainViewModel(
                     },
                 )
             }
+        }
+    }
+
+    /** 设置供应商排序模式。 */
+    fun setSortingMode(enabled: Boolean) {
+        transientState.update { it.copy(sortingMode = enabled) }
+    }
+
+    /** 标记下拉刷新引导已经展示。 */
+    fun markPullRefreshHintShown() {
+        viewModelScope.launch { settingsRepository.setPullRefreshHintShown(true) }
+    }
+
+    /** 保存供应商拖拽后的顺序。 */
+    fun updateProviderOrder(providerIds: List<Long>) {
+        viewModelScope.launch {
+            providerRepository.updateProviderOrder(providerIds)
+            transientState.update { it.copy(message = MainMessages.ProviderOrderUpdated) }
         }
     }
 

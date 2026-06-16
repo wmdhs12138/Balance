@@ -13,8 +13,8 @@ android {
         applicationId = "io.github.wmdhs12138.balance"
         minSdk = 26
         targetSdk = 35
-        versionCode = 16
-        versionName = "0.3.1"
+        versionCode = 19
+        versionName = "0.4.2"
     }
 
     signingConfigs {
@@ -76,6 +76,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.reorderable)
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)

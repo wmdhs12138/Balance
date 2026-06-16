@@ -1,6 +1,7 @@
 package io.github.wmdhs12138.balance.feature.main
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Login
 import androidx.compose.material.icons.filled.Key
@@ -52,6 +54,8 @@ fun ProviderSettingsSheet(
     provider: Provider,
     strings: LocalizedStrings,
     onDismiss: () -> Unit,
+    onLogin: () -> Unit,
+    onApiKey: () -> Unit,
     onSubmit: (String, String?, BalanceUnit) -> Unit,
     onDelete: (() -> Unit)?,
 ) {
@@ -60,48 +64,50 @@ fun ProviderSettingsSheet(
     var parserLabel by remember { mutableStateOf(provider.parserLabelForForms) }
     var balanceUnitOverride by remember { mutableStateOf(provider.balanceUnitOverride) }
     var showDeleteConfirm by remember { mutableStateOf(false) }
+    val credentialActionText = strings.get(if (provider.usesApiKey) R.string.action_api_key else R.string.action_login)
+    val credentialActionIcon = if (provider.usesApiKey) Icons.Default.Key else Icons.AutoMirrored.Filled.Login
 
     ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
                 .padding(horizontal = 20.dp, vertical = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            Text(strings.get(R.string.provider_settings_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.SemiBold)
-            SettingsSection(title = strings.get(R.string.provider_section_information)) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(10.dp),
-                ) {
-                    AppInfoRow(strings.get(R.string.field_provider_url), provider.baseUrl)
-                    AppInfoRow(
-                        strings.get(R.string.provider_last_success),
-                        provider.lastSuccessAtMillis?.formatDateTime() ?: strings.get(R.string.last_refresh_never),
-                    )
-                    AppInfoRow(
-                        strings.get(R.string.provider_last_attempt),
-                        provider.lastAttemptAtMillis?.formatDateTime() ?: strings.get(R.string.last_refresh_never),
-                    )
-                    provider.lastErrorText?.takeIf { provider.status != BalanceStatus.Ready }?.let { details ->
-                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                            Text(
-                                strings.get(R.string.provider_error_details),
-                                style = MaterialTheme.typography.bodyMedium,
-                            )
-                            Text(
-                                details,
-                                style = MaterialTheme.typography.bodySmall,
-                                maxLines = 4,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        }
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(
+                    text = provider.name,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = provider.baseUrl,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
+
+            SettingsSection(title = strings.get(R.string.provider_section_connection)) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                    AppInfoRow(strings.get(R.string.field_parser), provider.parserLabelForCard)
+                    Button(
+                        onClick = if (provider.usesApiKey) onApiKey else onLogin,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Icon(imageVector = credentialActionIcon, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(credentialActionText)
                     }
                 }
             }
-            SettingsSection(title = strings.get(R.string.provider_section_actions)) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                ) {
+
+            SettingsSection(title = strings.get(R.string.provider_section_edit)) {
+                Column(verticalArrangement = Arrangement.spacedBy(14.dp)) {
                     OutlinedTextField(
                         value = name,
                         onValueChange = { name = it },
@@ -109,33 +115,73 @@ fun ProviderSettingsSheet(
                         singleLine = true,
                         modifier = Modifier.fillMaxWidth(),
                     )
-                    Text(
-                        strings.get(R.string.field_parser),
-                        style = MaterialTheme.typography.labelLarge,
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            strings.get(R.string.field_parser),
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(6.dp),
+                        ) {
+                            parserLabels.forEach { label ->
+                                ParserFilterChip(
+                                    label = label,
+                                    selected = parserLabel == label,
+                                    onClick = { parserLabel = label },
+                                )
+                            }
+                        }
+                    }
+                    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(
+                            strings.get(R.string.field_balance_unit),
+                            style = MaterialTheme.typography.labelLarge,
+                        )
+                        BalanceUnitChips(
+                            selected = balanceUnitOverride,
+                            strings = strings,
+                            onSelected = { balanceUnitOverride = it },
+                        )
+                    }
+                }
+            }
+
+            SettingsSection(title = strings.get(R.string.provider_section_status)) {
+                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                    AppInfoRow(
+                        strings.get(R.string.status_ready),
+                        provider.status.label(strings),
+                        allowValueWrap = true,
                     )
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        verticalArrangement = Arrangement.spacedBy(6.dp),
-                    ) {
-                        parserLabels.forEach { label ->
-                            ParserFilterChip(
-                                label = label,
-                                selected = parserLabel == label,
-                                onClick = { parserLabel = label },
+                    AppInfoRow(
+                        strings.get(R.string.provider_last_success),
+                        provider.lastSuccessAtMillis?.formatDateTime() ?: strings.get(R.string.last_refresh_never),
+                        allowValueWrap = true,
+                    )
+                    AppInfoRow(
+                        strings.get(R.string.provider_last_attempt),
+                        provider.lastAttemptAtMillis?.formatDateTime() ?: strings.get(R.string.last_refresh_never),
+                        allowValueWrap = true,
+                    )
+                    provider.lastErrorText?.takeIf { provider.status != BalanceStatus.Ready }?.let { details ->
+                        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                            Text(
+                                strings.get(R.string.provider_error_details),
+                                style = MaterialTheme.typography.labelLarge,
+                            )
+                            Text(
+                                details,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 8,
+                                overflow = TextOverflow.Ellipsis,
                             )
                         }
                     }
-                    Text(
-                        strings.get(R.string.field_balance_unit),
-                        style = MaterialTheme.typography.labelLarge,
-                    )
-                    BalanceUnitChips(
-                        selected = balanceUnitOverride,
-                        strings = strings,
-                        onSelected = { balanceUnitOverride = it },
-                    )
                 }
             }
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,

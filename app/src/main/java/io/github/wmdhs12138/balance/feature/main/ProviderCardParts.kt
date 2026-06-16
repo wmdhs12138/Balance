@@ -10,6 +10,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +40,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,6 +49,7 @@ import io.github.wmdhs12138.balance.core.model.BalanceStatus
 import io.github.wmdhs12138.balance.core.balance.BalanceParserLabels
 import io.github.wmdhs12138.balance.core.model.Provider
 import kotlinx.coroutines.delay
+import java.util.Locale
 
 @Composable
 /** 处理ProviderStatusBar 方法。 */
@@ -114,76 +118,220 @@ fun AnimatedBalanceLabel(
             .background(pulseColor)
             .padding(horizontal = 2.dp, vertical = 1.dp),
     ) {
-        AnimatedContent(
-            targetState = BalanceLabelState(
-                text = provider.displayBalanceOrStatusText(strings),
-                hasBalance = provider.hasDisplayBalance,
-            ),
-            transitionSpec = {
-                // Material Design 3 emphasized fade-through: outgoing content fades quickly,
-                // incoming content appears slightly scaled with emphasized easing.
-                (
-                    fadeIn(
-                        animationSpec = tween(
-                            durationMillis = MotionDurationShort,
-                            delayMillis = MotionDurationShort,
-                            easing = LinearOutSlowInEasing,
-                        ),
-                    ) + scaleIn(
-                        initialScale = 0.92f,
-                        animationSpec = tween(
-                            durationMillis = MotionDurationMedium,
-                            delayMillis = MotionDurationShort,
-                            easing = FastOutSlowInEasing,
-                        ),
-                    )
-                    ).togetherWith(
-                        fadeOut(
-                            animationSpec = tween(
-                                durationMillis = MotionDurationShort,
-                                easing = FastOutSlowInEasing,
-                            ),
-                        ) + scaleOut(
-                            targetScale = 0.98f,
-                            animationSpec = tween(
-                                durationMillis = MotionDurationShort,
-                                easing = FastOutSlowInEasing,
-                            ),
-                        ),
-                    ).using(
-                        SizeTransform(
-                            clip = false,
-                            sizeAnimationSpec = { _, _ ->
-                                tween(
-                                    durationMillis = MotionDurationMedium,
-                                    easing = FastOutSlowInEasing,
-                                )
-                            },
-                        ),
-                    )
-            },
-            label = "balance-label-change",
-        ) { state ->
-            Text(
-                text = state.text,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = if (state.hasBalance) FontWeight.Bold else FontWeight.SemiBold,
-                color = if (state.hasBalance) {
-                    Color.Unspecified
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+        val rollingBalance = normalizedBalance?.toRollingBalanceParts()
+        if (provider.hasDisplayBalance && rollingBalance != null) {
+            RollingBalanceText(
+                parts = rollingBalance,
+                contentDescription = normalizedBalance.orEmpty(),
             )
+        } else {
+            AnimatedContent(
+                targetState = BalanceLabelState(
+                    text = provider.displayBalanceOrStatusText(strings),
+                    hasBalance = provider.hasDisplayBalance,
+                ),
+                transitionSpec = {
+                    // Material Design 3 emphasized fade-through: outgoing content fades quickly,
+                    // incoming content appears slightly scaled with emphasized easing.
+                    (
+                        fadeIn(
+                            animationSpec = tween(
+                                durationMillis = MotionDurationShort,
+                                delayMillis = MotionDurationShort,
+                                easing = LinearOutSlowInEasing,
+                            ),
+                        ) + scaleIn(
+                            initialScale = 0.92f,
+                            animationSpec = tween(
+                                durationMillis = MotionDurationMedium,
+                                delayMillis = MotionDurationShort,
+                                easing = FastOutSlowInEasing,
+                            ),
+                        )
+                        ).togetherWith(
+                            fadeOut(
+                                animationSpec = tween(
+                                    durationMillis = MotionDurationShort,
+                                    easing = FastOutSlowInEasing,
+                                ),
+                            ) + scaleOut(
+                                targetScale = 0.98f,
+                                animationSpec = tween(
+                                    durationMillis = MotionDurationShort,
+                                    easing = FastOutSlowInEasing,
+                                ),
+                            ),
+                        ).using(
+                            SizeTransform(
+                                clip = false,
+                                sizeAnimationSpec = { _, _ ->
+                                    tween(
+                                        durationMillis = MotionDurationMedium,
+                                        easing = FastOutSlowInEasing,
+                                    )
+                                },
+                            ),
+                        )
+                },
+                label = "balance-label-change",
+            ) { state ->
+                Text(
+                    text = state.text,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = if (state.hasBalance) FontWeight.Bold else FontWeight.SemiBold,
+                    color = if (state.hasBalance) {
+                        Color.Unspecified
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
+}
+
+
+@Composable
+/** 余额数字滚轮文本：每一位数字独立上下翻滚。 */
+private fun RollingBalanceText(
+    parts: RollingBalanceParts,
+    contentDescription: String,
+) {
+    Row(
+        modifier = Modifier.semantics { this.contentDescription = contentDescription },
+        verticalAlignment = Alignment.Bottom,
+    ) {
+        RollingStaticText(text = parts.prefix)
+        parts.numberText.forEachIndexed { index, char ->
+            if (char.isDigit()) {
+                RollingDigit(
+                    digit = char,
+                    index = index,
+                )
+            } else {
+                RollingStaticText(text = char.toString(), bold = true)
+            }
+        }
+        RollingStaticText(text = parts.suffix)
+    }
+}
+
+@Composable
+/** 单个数字的滚轮动画。 */
+private fun RollingDigit(
+    digit: Char,
+    index: Int,
+) {
+    AnimatedContent(
+        targetState = digit,
+        transitionSpec = {
+            val oldDigit = initialState.digitToIntOrNull() ?: 0
+            val newDigit = targetState.digitToIntOrNull() ?: 0
+            val forwardSteps = (newDigit - oldDigit + 10) % 10
+            val rollUp = forwardSteps in 1..5 || oldDigit == newDigit
+            val delay = (index.coerceAtMost(6) * BalanceRollDigitStagger).coerceAtMost(180)
+            (
+                slideInVertically(
+                    animationSpec = tween(
+                        durationMillis = BalanceRollDuration,
+                        delayMillis = delay,
+                        easing = FastOutSlowInEasing,
+                    ),
+                    initialOffsetY = { if (rollUp) it else -it },
+                ) + fadeIn(
+                    animationSpec = tween(
+                        durationMillis = BalanceRollFadeDuration,
+                        delayMillis = delay,
+                        easing = LinearOutSlowInEasing,
+                    ),
+                )
+                ).togetherWith(
+                    slideOutVertically(
+                        animationSpec = tween(
+                            durationMillis = BalanceRollDuration,
+                            delayMillis = delay,
+                            easing = FastOutSlowInEasing,
+                        ),
+                        targetOffsetY = { if (rollUp) -it else it },
+                    ) + fadeOut(
+                        animationSpec = tween(
+                            durationMillis = BalanceRollFadeDuration,
+                            delayMillis = delay,
+                            easing = FastOutSlowInEasing,
+                        ),
+                    ),
+                ).using(SizeTransform(clip = true))
+        },
+        label = "balance-digit-roll-$index",
+    ) { value ->
+        Text(
+            text = value.toString(),
+            style = MaterialTheme.typography.titleLarge.copy(fontFamily = FontFamily.Monospace),
+            fontWeight = FontWeight.Bold,
+            color = Color.Unspecified,
+            maxLines = 1,
+        )
+    }
+}
+
+@Composable
+/** 滚轮数字周围的静态符号/小数点/单位。 */
+private fun RollingStaticText(
+    text: String,
+    bold: Boolean = false,
+) {
+    text.forEach { char ->
+        val compactCurrency = char == '¥' || char == '$'
+        Text(
+            text = char.toString(),
+            style = if (compactCurrency) {
+                MaterialTheme.typography.titleMedium
+            } else {
+                MaterialTheme.typography.titleLarge
+            },
+            fontWeight = when {
+                compactCurrency -> FontWeight.SemiBold
+                bold -> FontWeight.Bold
+                else -> FontWeight.Normal
+            },
+            color = Color.Unspecified,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+/** 可滚动显示的余额数字结构。 */
+private data class RollingBalanceParts(
+    val prefix: String,
+    val numberText: String,
+    val suffix: String,
+)
+
+/** 提取余额字符串中的数字，保留货币符号/单位。 */
+private fun String.toRollingBalanceParts(): RollingBalanceParts? {
+    val match = Regex("""^(.*?)([-+]?\d+(?:\.\d+)?)(.*)$""").matchEntire(this.trim()) ?: return null
+    val numericText = match.groupValues[2]
+    numericText.toDoubleOrNull() ?: return null
+    return RollingBalanceParts(
+        prefix = match.groupValues[1],
+        numberText = numericText,
+        suffix = match.groupValues[3],
+    )
 }
 
 /** 处理MotionDurationShort 常量。 */
 const val MotionDurationShort = 90
 /** 处理MotionDurationMedium 常量。 */
 const val MotionDurationMedium = 300
+/** 余额数字滚轮单次翻动时长。 */
+const val BalanceRollDuration = 520
+/** 数字淡入淡出时长。 */
+const val BalanceRollFadeDuration = 180
+/** 多位数字依次启动的间隔。 */
+const val BalanceRollDigitStagger = 28
 
 /** BalanceLabelState 数据结构。 */
 data class BalanceLabelState(

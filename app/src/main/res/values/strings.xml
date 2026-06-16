@@ -86,6 +86,9 @@
     <string name="provider_error_details">Details</string>
     <string name="provider_section_actions">Actions</string>
     <string name="provider_section_information">Information</string>
+    <string name="provider_section_connection">Connection</string>
+    <string name="provider_section_edit">Edit</string>
+    <string name="provider_section_status">Status</string>
     <string name="provider_last_attempt">Last attempt</string>
     <string name="provider_last_success">Last success</string>
     <string name="add_provider_title">Add provider</string>
@@ -110,4 +113,15 @@
     <string name="balance_unit_unknown">No unit</string>
 
     <string name="content_description_encrypted_login_data">Encrypted login data</string>
+
+    <string name="message_provider_order_updated">Provider order updated</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_done">Done</string>
+    <string name="sort_providers_title">Sort providers</string>
+    <string name="sort_providers_hint">Long press and drag cards to reorder</string>
+
+    <string name="pull_refresh_hint">Pull down to refresh balances</string>
+    <string name="pull_refresh_pull">Pull to refresh</string>
+    <string name="pull_refresh_release">Release to refresh</string>
+    <string name="pull_refresh_refreshing">Refreshing…</string>
 </resources>

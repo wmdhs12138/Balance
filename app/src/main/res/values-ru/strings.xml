@@ -109,4 +109,15 @@
     <string name="balance_unit_unknown">No unit</string>
 
     <string name="content_description_encrypted_login_data">Зашифрованные данные входа</string>
+
+    <string name="message_provider_order_updated">Provider order updated</string>
+    <string name="action_sort">Sort</string>
+    <string name="action_done">Done</string>
+    <string name="sort_providers_title">Sort providers</string>
+    <string name="sort_providers_hint">Long press and drag cards to reorder</string>
+
+    <string name="pull_refresh_hint">Pull down to refresh balances</string>
+    <string name="pull_refresh_pull">Pull to refresh</string>
+    <string name="pull_refresh_release">Release to refresh</string>
+    <string name="pull_refresh_refreshing">Refreshing…</string>
 </resources>

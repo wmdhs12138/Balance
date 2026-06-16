@@ -23,6 +23,7 @@ class SettingsRepository(private val context: Context) {
             dynamicColor = prefs[DYNAMIC_COLOR] ?: true,
             seedColor = prefs[SEED_COLOR] ?: DEFAULT_SEED_COLOR,
             language = AppLanguage.fromPreference(prefs[LANGUAGE]),
+            pullRefreshHintShown = prefs[PULL_REFRESH_HINT_SHOWN] ?: false,
         )
     }
 
@@ -46,6 +47,11 @@ class SettingsRepository(private val context: Context) {
         context.dataStore.edit { it[LANGUAGE] = language.preferenceValue }
     }
 
+    /** 标记下拉刷新提示是否已经展示。 */
+    suspend fun setPullRefreshHintShown(shown: Boolean) {
+        context.dataStore.edit { it[PULL_REFRESH_HINT_SHOWN] = shown }
+    }
+
     /** 读取本地化字符串 方法。 */
     suspend fun localizedString(resId: Int, vararg args: Any): String {
         val language = preferences.first().language
@@ -60,5 +66,6 @@ class SettingsRepository(private val context: Context) {
         val DYNAMIC_COLOR = booleanPreferencesKey("dynamic_color")
         val SEED_COLOR = longPreferencesKey("seed_color")
         val LANGUAGE = stringPreferencesKey("language")
+        val PULL_REFRESH_HINT_SHOWN = booleanPreferencesKey("pull_refresh_hint_shown")
     }
 }

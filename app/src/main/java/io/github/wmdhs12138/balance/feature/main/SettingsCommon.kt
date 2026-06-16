@@ -49,19 +49,30 @@ fun SettingsSection(
 
 @Composable
 /** 处理AppInfoRow 方法。 */
-fun AppInfoRow(label: String, value: String) {
+fun AppInfoRow(
+    label: String,
+    value: String,
+    allowValueWrap: Boolean = false,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = if (allowValueWrap) Alignment.Top else Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Text(label, style = MaterialTheme.typography.bodyMedium)
+        Text(
+            label,
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.weight(0.42f),
+            maxLines = if (allowValueWrap) 2 else 1,
+            overflow = TextOverflow.Ellipsis,
+        )
         Text(
             value,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.SemiBold,
-            maxLines = 1,
+            maxLines = if (allowValueWrap) 3 else 1,
             overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(0.58f),
         )
     }
 }

@@ -41,6 +41,7 @@ class ProviderRepository(
                 baseUrl = normalizedUrl.origin,
                 loginUrl = normalizedUrl.displayUrl,
                 balanceEndpointHint = parserLabel?.takeIf { it.isNotBlank() },
+                sortOrder = providerDao.getMaxSortOrder() + 1,
                 balanceUnitOverride = balanceUnitOverride,
                 status = BalanceStatus.NotConnected,
             ),
@@ -91,6 +92,13 @@ class ProviderRepository(
             balanceUnitOverride = balanceUnitOverride,
             lastAttemptAtMillis = System.currentTimeMillis(),
         )
+    }
+
+    /** 按给定 ID 顺序保存供应商排序。 */
+    suspend fun updateProviderOrder(providerIds: List<Long>) {
+        providerIds.forEachIndexed { index, id ->
+            providerDao.updateSortOrder(id, index)
+        }
     }
 
     /** 删除服务商 方法。 */

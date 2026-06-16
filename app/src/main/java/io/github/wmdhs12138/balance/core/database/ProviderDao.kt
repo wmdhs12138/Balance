@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 /** ProviderDao 接口。 */
 interface ProviderDao {
-    @Query("SELECT * FROM providers ORDER BY name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM providers ORDER BY sortOrder ASC, name COLLATE NOCASE ASC")
     /** 监听服务商列表 方法。 */
     fun observeProviders(): Flow<List<ProviderEntity>>
 
-    @Query("SELECT * FROM providers ORDER BY name COLLATE NOCASE ASC")
+    @Query("SELECT * FROM providers ORDER BY sortOrder ASC, name COLLATE NOCASE ASC")
     /** 读取服务商列表 方法。 */
     suspend fun getProviders(): List<ProviderEntity>
 
@@ -27,8 +27,12 @@ interface ProviderDao {
     suspend fun getProviderByBaseUrl(baseUrl: String): ProviderEntity?
 
     @Query("SELECT COUNT(*) FROM providers")
-    /** 处理count 方法。 */
+    /** 统计服务商数量。 */
     suspend fun count(): Int
+
+    @Query("SELECT COALESCE(MAX(sortOrder), -1) FROM providers")
+    /** 读取当前最大排序值。 */
+    suspend fun getMaxSortOrder(): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     /** 插入服务商 方法。 */
@@ -87,6 +91,10 @@ interface ProviderDao {
         balanceUnitOverride: io.github.wmdhs12138.balance.core.model.BalanceUnit,
         lastAttemptAtMillis: Long,
     )
+
+    @Query("UPDATE providers SET sortOrder = :sortOrder WHERE id = :id")
+    /** 更新单个服务商排序值。 */
+    suspend fun updateSortOrder(id: Long, sortOrder: Int)
 
     @Query("DELETE FROM providers WHERE id = :id")
     /** 删除服务商 方法。 */

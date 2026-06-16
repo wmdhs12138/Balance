@@ -10,7 +10,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 
 @Database(
     entities = [ProviderEntity::class],
-    version = 2,
+    version = 3,
     exportSchema = true,
 )
 @TypeConverters(Converters::class)
@@ -22,10 +22,18 @@ abstract class AppDatabase : RoomDatabase() {
         private var instance: AppDatabase? = null
 
         private val MIGRATION_1_2 = object : Migration(1, 2) {
-            /** 处理migrate 方法。 */
+            /** 从版本 1 增加余额单位字段。 */
             override fun migrate(db: SupportSQLiteDatabase) {
                 db.execSQL("ALTER TABLE providers ADD COLUMN balanceUnit TEXT NOT NULL DEFAULT 'unknown'")
                 db.execSQL("ALTER TABLE providers ADD COLUMN balanceUnitOverride TEXT NOT NULL DEFAULT 'auto'")
+            }
+        }
+
+        private val MIGRATION_2_3 = object : Migration(2, 3) {
+            /** 从版本 2 增加供应商排序字段。 */
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE providers ADD COLUMN sortOrder INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("UPDATE providers SET sortOrder = id")
             }
         }
 
@@ -37,7 +45,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "balance.db",
                 )
-                    .addMigrations(MIGRATION_1_2)
+                    .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
                     .build()
                     .also { instance = it }
             }
