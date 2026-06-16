@@ -18,8 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Disable local Gradle proxy in CI
-        run: sed -i '/^systemProp\..*\.proxy/d' gradle.properties
+      - name: Disable local Gradle-only settings in CI
+        run: |
+          sed -i '/^systemProp\..*\.proxy/d' gradle.properties
+          sed -i '/^android\.aapt2FromMavenOverride=/d' gradle.properties
 
       - name: Set up JDK
         uses: actions/setup-java@v4
