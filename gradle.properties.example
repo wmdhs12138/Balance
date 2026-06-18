@@ -7,8 +7,9 @@ android.nonTransitiveRClass=true
 kotlin.code.style=official
 kotlin.compiler.execution.strategy=in-process
 
-# Proxy settings disabled in this environment
+# Optional local-only settings. Do not enable these in the repository copy.
 # systemProp.http.proxyHost=127.0.0.1
 # systemProp.http.proxyPort=7892
 # systemProp.https.proxyHost=127.0.0.1
 # systemProp.https.proxyPort=7892
+# android.aapt2FromMavenOverride=/workspace/android-sdk/wrappers/aapt2
